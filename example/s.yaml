@@ -5,7 +5,7 @@ services:
   component-test: #  服务名称
     component: ${path(..)}  # 这里引入的是相对路径，正式配置替换成你自己的component名称即可 
     props:
-      service:
-        name: qianfeng-demo
-      function:
-        name: test-oss
+      region: cn-shanghai
+      serviceName: qianfeng-demo
+      functionName: node-demo-1
+      triggerName: timerTrigger

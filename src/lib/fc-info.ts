@@ -246,27 +246,16 @@ export default class FcInfo {
     return trigger;
   }
 
-  async info(serviceName: string, functionName: string, triggerNames?: string[]): Promise<any> {
-    if (_.isNil(serviceName)) {
-      throw new Error('please provide serviceName.');
+  async info(resourceName: string, isService?: boolean, isFunction?: boolean, isTrigger?: boolean, serviceName?: string, functionName?: string): Promise<any> {
+    if (_.isNil(resourceName)) {
+      throw new Error('please provide resource name via --name flag.');
     }
-    const serviceConfig: ServiceConfig = await this.infoService(serviceName);
-    if (_.isNil(functionName)) {
-      // TODO: 不指定 functionName，则获取 serviceName 下的所有 function
-      throw new Error('please provide functionName.');
+    if (isService) {
+      return this.infoService(resourceName);
+    } else if (isFunction) {
+      return this.infoFunction(serviceName, resourceName);
+    } else  if (isTrigger) {
+      return this.infoTrigger(serviceName, functionName, resourceName);
     }
-    const functionConfig: FunctionConfig = await this.infoFunction(serviceName, functionName);
-    let triggersConfig: TriggerConfig[] = [];
-    if (!_.isEmpty(triggerNames)) {
-      for (const triggerName of triggerNames) {
-        triggersConfig.push(await this.infoTrigger(serviceName, functionName, triggerName));
-      }
-    }
-    // TODO: 不指定 functionName，则获取 serviceName 下的所有 function
-    return {
-      service: serviceConfig,
-      function: functionConfig,
-      triggers: triggersConfig,
-    };
   }
 }
