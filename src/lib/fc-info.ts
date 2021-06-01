@@ -246,16 +246,22 @@ export default class FcInfo {
     return trigger;
   }
 
-  async info(resourceName: string, isService?: boolean, isFunction?: boolean, isTrigger?: boolean, serviceName?: string, functionName?: string): Promise<any> {
-    if (_.isNil(resourceName)) {
-      throw new Error('please provide resource name via --name flag.');
+  async info(serviceName: string, functionName?: string, triggerNames?: string[]): Promise<any> {
+    const serviceInfo: any = await this.infoService(serviceName);
+    const info: any = {
+      service: serviceInfo
+    };
+    if (functionName) {
+      Object.assign(info, {
+        function: await this.infoFunction(serviceName, functionName)
+      })
     }
-    if (isService) {
-      return this.infoService(resourceName);
-    } else if (isFunction) {
-      return this.infoFunction(serviceName, resourceName);
-    } else  if (isTrigger) {
-      return this.infoTrigger(serviceName, functionName, resourceName);
+    if (!_.isEmpty(triggerNames)) {
+      Object.assign(info, { triggers: [] } );
+      for (const triggerName of triggerNames) {
+        info.triggers.push(await this.infoTrigger(serviceName, functionName, triggerName));
+      }
     }
+    return info;
   }
 }

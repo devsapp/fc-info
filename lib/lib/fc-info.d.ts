@@ -9,5 +9,5 @@ export default class FcInfo {
     private infoService;
     private infoFunction;
     private infoTrigger;
-    info(resourceName: string, isService?: boolean, isFunction?: boolean, isTrigger?: boolean, serviceName?: string, functionName?: string): Promise<any>;
+    info(serviceName: string, functionName?: string, triggerNames?: string[]): Promise<any>;
 }

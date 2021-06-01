@@ -25,28 +25,30 @@ export default class FcInfoComponent extends BaseComponent {
 
   private argsParser(args: string) {
     const apts: any = {
-      boolean: ['help', 'service', 'function', 'trigger'],
-      alias: { help: 'h', name: 'n', region: 'r', access: 'a'},
+      boolean: ['help'],
+      alias: { help: 'h', region: 'r', access: 'a'},
     };
     const comParse: any = core.commandParse({ args }, apts);
 
     // 将Args转成Object
     comParse.data = comParse.data || {};
-    const { region, access, name } = comParse.data;
+    const { region, access } = comParse.data;
     const functionName: string = comParse.data['function-name'];
     const serviceName: string = comParse.data['service-name'];
-    const isService: boolean = comParse.data.service;
-    const isFunction: boolean = comParse.data.function;
-    const isTrigger: boolean = comParse.data.trigger;
+    const triggerName: any = comParse.data['trigger-name'];
+    const triggerNames: string[] = [];
+    if (_.isString(triggerName)) {
+      triggerNames.push(triggerName);
+    } else {
+      triggerNames.push(...triggerName);
+    }
+
     return {
       region,
       functionName,
       serviceName,
-      name,
-      access,
-      isService,
-      isFunction,
-      isTrigger,
+      triggerNames,
+      access
     };
   }
 
@@ -59,29 +61,22 @@ export default class FcInfoComponent extends BaseComponent {
     const parsedArgs: any = this.argsParser(inputs?.args);
     const region: string = inputs?.props?.region || parsedArgs?.region;
     const serviceName: string = inputs?.props?.serviceName || parsedArgs?.serviceName;
-    const functionName: string = inputs?.props?.functionName || parsedArgs?.functionName;
-    let resourceName: string;
-    if (parsedArgs?.isService) {
-      if (parsedArgs?.isFunction || parsedArgs?.isTrigger) {
-        throw new Error('only one of --service/--function/--trigger can be set')
-      }
-      resourceName = inputs?.props?.serviceName || parsedArgs?.name;
-    } else if (parsedArgs?.isFunction) {
-      if (parsedArgs?.isTrigger) {
-        throw new Error('only one of --service/--function/--trigger can be set')
-      }
-      resourceName = inputs?.props?.functionName || parsedArgs?.name;
-    } else if (parsedArgs?.isTrigger) {
-      resourceName = inputs?.props?.triggerName || parsedArgs?.name;
-    } else {
-      throw new Error('you must specify --service/--function/--trigger flag.');
+    if (!serviceName) {
+      throw new Error(`You must provide serviceName.`);
     }
-
-    const credential: ICredentials = await core.getCredential(inputs?.project?.access);
-    await this.report('fc-info', 'info', credential.AccountID, inputs?.project?.access);
-
+    const functionName: string = inputs?.props?.functionName || parsedArgs?.functionName;
+    const triggerNames: string[] = inputs?.props?.triggerNames || parsedArgs?.triggerNames;
+    if (!functionName && !_.isEmpty(triggerNames)) {
+      throw new Error(`Can not specify trigger without function.`);
+    }
+    const access: string = inputs?.project?.access || parsedArgs?.access;
+    // if (!access) {
+    //   throw new Error(`You must provide access.`);
+    // }
+    const credential: ICredentials = await core.getCredential(access);
+    await this.report('fc-info', 'info', credential.AccountID, access);
+    
     const fcInfo: FcInfo = new FcInfo(credential, region);
-    const info: any = fcInfo.info(resourceName, parsedArgs?.isService, parsedArgs?.isFunction, parsedArgs?.isTrigger, serviceName, functionName);
-    return info;
+    return await fcInfo.info(serviceName, functionName, triggerNames);
   }
 }
