@@ -56,7 +56,7 @@
 					}
 				},
 				{
-					"id": 26,
+					"id": 23,
 					"name": "client",
 					"kind": 1024,
 					"kindString": "Property",
@@ -80,7 +80,7 @@
 					}
 				},
 				{
-					"id": 27,
+					"id": 24,
 					"name": "inputs",
 					"kind": 1024,
 					"kindString": "Property",
@@ -97,7 +97,7 @@
 					}
 				},
 				{
-					"id": 30,
+					"id": 27,
 					"name": "__doc",
 					"kind": 2048,
 					"kindString": "Method",
@@ -111,14 +111,14 @@
 					],
 					"signatures": [
 						{
-							"id": 31,
+							"id": 28,
 							"name": "__doc",
 							"kind": 4096,
 							"kindString": "Call signature",
 							"flags": {},
 							"parameters": [
 								{
-									"id": 32,
+									"id": 29,
 									"name": "projectName",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -147,7 +147,7 @@
 					}
 				},
 				{
-					"id": 28,
+					"id": 25,
 					"name": "__getBasePath",
 					"kind": 2048,
 					"kindString": "Method",
@@ -161,7 +161,7 @@
 					],
 					"signatures": [
 						{
-							"id": 29,
+							"id": 26,
 							"name": "__getBasePath",
 							"kind": 4096,
 							"kindString": "Call signature",
@@ -248,50 +248,6 @@
 											}
 										},
 										{
-											"id": 21,
-											"name": "isFunction",
-											"kind": 1024,
-											"kindString": "Property",
-											"flags": {},
-											"type": {
-												"type": "intrinsic",
-												"name": "boolean"
-											}
-										},
-										{
-											"id": 20,
-											"name": "isService",
-											"kind": 1024,
-											"kindString": "Property",
-											"flags": {},
-											"type": {
-												"type": "intrinsic",
-												"name": "boolean"
-											}
-										},
-										{
-											"id": 22,
-											"name": "isTrigger",
-											"kind": 1024,
-											"kindString": "Property",
-											"flags": {},
-											"type": {
-												"type": "intrinsic",
-												"name": "boolean"
-											}
-										},
-										{
-											"id": 18,
-											"name": "name",
-											"kind": 1024,
-											"kindString": "Property",
-											"flags": {},
-											"type": {
-												"type": "intrinsic",
-												"name": "any"
-											}
-										},
-										{
 											"id": 15,
 											"name": "region",
 											"kind": 1024,
@@ -312,6 +268,20 @@
 												"type": "intrinsic",
 												"name": "string"
 											}
+										},
+										{
+											"id": 18,
+											"name": "triggerNames",
+											"kind": 1024,
+											"kindString": "Property",
+											"flags": {},
+											"type": {
+												"type": "array",
+												"elementType": {
+													"type": "intrinsic",
+													"name": "string"
+												}
+											}
 										}
 									],
 									"groups": [
@@ -321,12 +291,9 @@
 											"children": [
 												19,
 												16,
-												21,
-												20,
-												22,
-												18,
 												15,
-												17
+												17,
+												18
 											]
 										}
 									]
@@ -336,7 +303,7 @@
 					]
 				},
 				{
-					"id": 23,
+					"id": 20,
 					"name": "info",
 					"kind": 2048,
 					"kindString": "Method",
@@ -346,13 +313,13 @@
 					"sources": [
 						{
 							"fileName": "index.ts",
-							"line": 58,
+							"line": 60,
 							"character": 19
 						}
 					],
 					"signatures": [
 						{
-							"id": 24,
+							"id": 21,
 							"name": "info",
 							"kind": 4096,
 							"kindString": "Call signature",
@@ -363,7 +330,7 @@
 							},
 							"parameters": [
 								{
-									"id": 25,
+									"id": 22,
 									"name": "inputs",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -486,18 +453,18 @@
 					"title": "Properties",
 					"kind": 1024,
 					"children": [
-						26,
-						27
+						23,
+						24
 					]
 				},
 				{
 					"title": "Methods",
 					"kind": 2048,
 					"children": [
-						30,
-						28,
+						27,
+						25,
 						11,
-						23,
+						20,
 						5
 					]
 				}
