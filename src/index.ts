@@ -2,7 +2,7 @@ import BaseComponent from './common/base';
 import { InputProps, ICredentials } from './common/entity';
 import * as core from '@serverless-devs/core';
 import * as _ from 'lodash';
-
+import { COMPONENT_HELP_INFO, INFO_HELP_INFO } from './lib/static';
 import FcInfo from './lib/fc-info';
 
 export default class FcInfoComponent extends BaseComponent {
@@ -26,13 +26,13 @@ export default class FcInfoComponent extends BaseComponent {
   private argsParser(args: string) {
     const apts: any = {
       boolean: ['help'],
-      alias: { help: 'h', region: 'r', access: 'a'},
+      alias: { help: 'h', region: 'r', aliasName: 'a'},
     };
     const comParse: any = core.commandParse({ args }, apts);
 
     // 将Args转成Object
     comParse.data = comParse.data || {};
-    const { region, access } = comParse.data;
+    const { region, aliasName } = comParse.data;
     const functionName: string = comParse.data['function-name'];
     const serviceName: string = comParse.data['service-name'];
     const triggerName: any = comParse.data['trigger-name'];
@@ -42,13 +42,15 @@ export default class FcInfoComponent extends BaseComponent {
     } else {
       triggerNames.push(...triggerName);
     }
+    const isHelp: boolean = comParse.data.help;
 
     return {
       region,
       functionName,
       serviceName,
       triggerNames,
-      access
+      access: aliasName,
+      isHelp
     };
   }
 
@@ -59,6 +61,10 @@ export default class FcInfoComponent extends BaseComponent {
    */
   public async info(inputs: InputProps): Promise<any> {
     const parsedArgs: any = this.argsParser(inputs?.args);
+    if (parsedArgs.isHelp) {
+      core.help(INFO_HELP_INFO);
+      return;
+    }
     const region: string = inputs?.props?.region || parsedArgs?.region;
     const serviceName: string = inputs?.props?.serviceName || parsedArgs?.serviceName;
     if (!serviceName) {
@@ -78,5 +84,9 @@ export default class FcInfoComponent extends BaseComponent {
     
     const fcInfo: FcInfo = new FcInfo(credential, region);
     return await fcInfo.info(serviceName, functionName, triggerNames);
+  }
+
+  public help(): void {
+    core.help(COMPONENT_HELP_INFO);
   }
 }
