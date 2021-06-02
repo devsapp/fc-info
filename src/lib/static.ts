@@ -26,6 +26,7 @@ export const COMPONENT_HELP_INFO = [
       },
       {
         name: 'aliasName',
+        typeLabel: '{underline <name>}',
         description: 'Specify the key name.',
         alias: 'a',
         type: String,
@@ -60,22 +61,26 @@ export const INFO_HELP_INFO = [
     optionList: [
       {
         name: 'region',
+        typeLabel: '{underline <region>}',
         description: 'Specify the region of alicloud.',
         alias: 'r',
         type: String,
       },
       {
         name: 'service-name',
+        typeLabel: '{underline <serviceName>}',
         description: 'Specify the alicloud fc service name.',
         type: String,
       },
       {
         name: 'function-name',
+        typeLabel: '{underline <functionName>}',
         description: 'Specify the alicloud fc function name.',
         type: String,
       },
       {
         name: 'trigger-name',
+        typeLabel: '{underline <triggerName>}',
         description: 'Specify the alicloud fc trigger name, you can set names by using multiple trigger-name option, eg: --trigger-name triggerA --trigger-name triggerB.',
         type: String,
       },
@@ -92,6 +97,7 @@ export const INFO_HELP_INFO = [
       },
       {
         name: 'aliasName',
+        typeLabel: '{underline <name>}',
         description: 'Specify the key name.',
         alias: 'a',
         type: String,
