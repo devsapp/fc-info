@@ -4,6 +4,7 @@ import * as core from '@serverless-devs/core';
 import * as _ from 'lodash';
 import { COMPONENT_HELP_INFO, INFO_HELP_INFO } from './lib/static';
 import FcInfo from './lib/fc-info';
+import logger from './common/logger';
 
 export default class FcInfoComponent extends BaseComponent {
   constructor(props) {
@@ -17,10 +18,14 @@ export default class FcInfoComponent extends BaseComponent {
       uid = credentials.AccountID;
     }
 
-    core.reportComponent(componentName, {
-      command,
-      uid,
-    });
+    try {
+      core.reportComponent(componentName, {
+        command,
+        uid,
+      });
+    } catch (e) {
+      logger.warning(`Component ${componentName} report error: ${e.message}`);
+    }
   }
 
   private argsParser(args: string) {
@@ -61,6 +66,12 @@ export default class FcInfoComponent extends BaseComponent {
    */
   public async info(inputs: InputProps): Promise<any> {
     const parsedArgs: any = this.argsParser(inputs?.args);
+    const access: string = inputs?.project?.access || parsedArgs?.access;
+    // if (!access) {
+    //   throw new Error(`You must provide access.`);
+    // }
+    const credential: ICredentials = await core.getCredential(access);
+    await this.report('fc-info', 'info', credential.AccountID, access);
     if (parsedArgs.isHelp) {
       core.help(INFO_HELP_INFO);
       return;
@@ -75,18 +86,14 @@ export default class FcInfoComponent extends BaseComponent {
     if (!functionName && !_.isEmpty(triggerNames)) {
       throw new Error(`Can not specify trigger without function.`);
     }
-    const access: string = inputs?.project?.access || parsedArgs?.access;
-    // if (!access) {
-    //   throw new Error(`You must provide access.`);
-    // }
-    const credential: ICredentials = await core.getCredential(access);
-    await this.report('fc-info', 'info', credential.AccountID, access);
+    
     
     const fcInfo: FcInfo = new FcInfo(credential, region);
     return await fcInfo.info(serviceName, functionName, triggerNames);
   }
 
-  public help(): void {
+  public async help(inputs: InputProps): Promise<void> {
+    await this.report('fc-info', 'help', null, inputs?.project?.access);
     core.help(COMPONENT_HELP_INFO);
   }
 }
