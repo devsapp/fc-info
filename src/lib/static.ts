@@ -5,7 +5,7 @@ export const COMPONENT_HELP_INFO = [
     content: 'You can use the component to display the information of alicloud function computer resources.',
   },
   {
-    header: 'Synopsis',
+    header: 'Usage',
     content: '$ s <command> <options>',
   },
   {

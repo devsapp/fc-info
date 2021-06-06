@@ -10,4 +10,5 @@ export default class FcInfoComponent extends BaseComponent {
      * @returns
      */
     info(inputs: InputProps): Promise<any>;
+    help(inputs: InputProps): Promise<void>;
 }

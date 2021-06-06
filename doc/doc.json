@@ -56,7 +56,7 @@
 					}
 				},
 				{
-					"id": 23,
+					"id": 27,
 					"name": "client",
 					"kind": 1024,
 					"kindString": "Property",
@@ -80,7 +80,7 @@
 					}
 				},
 				{
-					"id": 24,
+					"id": 28,
 					"name": "inputs",
 					"kind": 1024,
 					"kindString": "Property",
@@ -97,7 +97,7 @@
 					}
 				},
 				{
-					"id": 27,
+					"id": 31,
 					"name": "__doc",
 					"kind": 2048,
 					"kindString": "Method",
@@ -111,14 +111,14 @@
 					],
 					"signatures": [
 						{
-							"id": 28,
+							"id": 32,
 							"name": "__doc",
 							"kind": 4096,
 							"kindString": "Call signature",
 							"flags": {},
 							"parameters": [
 								{
-									"id": 29,
+									"id": 33,
 									"name": "projectName",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -147,7 +147,7 @@
 					}
 				},
 				{
-					"id": 25,
+					"id": 29,
 					"name": "__getBasePath",
 					"kind": 2048,
 					"kindString": "Method",
@@ -161,7 +161,7 @@
 					],
 					"signatures": [
 						{
-							"id": 26,
+							"id": 30,
 							"name": "__getBasePath",
 							"kind": 4096,
 							"kindString": "Call signature",
@@ -192,7 +192,7 @@
 					"sources": [
 						{
 							"fileName": "index.ts",
-							"line": 26,
+							"line": 31,
 							"character": 20
 						}
 					],
@@ -234,7 +234,8 @@
 											"type": {
 												"type": "intrinsic",
 												"name": "any"
-											}
+											},
+											"defaultValue": "..."
 										},
 										{
 											"id": 16,
@@ -245,6 +246,17 @@
 											"type": {
 												"type": "intrinsic",
 												"name": "string"
+											}
+										},
+										{
+											"id": 20,
+											"name": "isHelp",
+											"kind": 1024,
+											"kindString": "Property",
+											"flags": {},
+											"type": {
+												"type": "intrinsic",
+												"name": "boolean"
 											}
 										},
 										{
@@ -291,6 +303,7 @@
 											"children": [
 												19,
 												16,
+												20,
 												15,
 												17,
 												18
@@ -303,7 +316,55 @@
 					]
 				},
 				{
-					"id": 20,
+					"id": 24,
+					"name": "help",
+					"kind": 2048,
+					"kindString": "Method",
+					"flags": {
+						"isPublic": true
+					},
+					"sources": [
+						{
+							"fileName": "index.ts",
+							"line": 95,
+							"character": 19
+						}
+					],
+					"signatures": [
+						{
+							"id": 25,
+							"name": "help",
+							"kind": 4096,
+							"kindString": "Call signature",
+							"flags": {},
+							"parameters": [
+								{
+									"id": 26,
+									"name": "inputs",
+									"kind": 32768,
+									"kindString": "Parameter",
+									"flags": {},
+									"type": {
+										"type": "reference",
+										"name": "InputProps"
+									}
+								}
+							],
+							"type": {
+								"type": "reference",
+								"typeArguments": [
+									{
+										"type": "intrinsic",
+										"name": "void"
+									}
+								],
+								"name": "Promise"
+							}
+						}
+					]
+				},
+				{
+					"id": 21,
 					"name": "info",
 					"kind": 2048,
 					"kindString": "Method",
@@ -313,13 +374,13 @@
 					"sources": [
 						{
 							"fileName": "index.ts",
-							"line": 60,
+							"line": 67,
 							"character": 19
 						}
 					],
 					"signatures": [
 						{
-							"id": 21,
+							"id": 22,
 							"name": "info",
 							"kind": 4096,
 							"kindString": "Call signature",
@@ -330,7 +391,7 @@
 							},
 							"parameters": [
 								{
-									"id": 22,
+									"id": 23,
 									"name": "inputs",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -366,7 +427,7 @@
 					"sources": [
 						{
 							"fileName": "index.ts",
-							"line": 13,
+							"line": 14,
 							"character": 22
 						}
 					],
@@ -453,18 +514,19 @@
 					"title": "Properties",
 					"kind": 1024,
 					"children": [
-						23,
-						24
+						27,
+						28
 					]
 				},
 				{
 					"title": "Methods",
 					"kind": 2048,
 					"children": [
-						27,
-						25,
+						31,
+						29,
 						11,
-						20,
+						24,
+						21,
 						5
 					]
 				}
@@ -472,7 +534,7 @@
 			"sources": [
 				{
 					"fileName": "index.ts",
-					"line": 8,
+					"line": 9,
 					"character": 36
 				}
 			],
