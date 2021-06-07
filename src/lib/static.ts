@@ -25,7 +25,7 @@ export const COMPONENT_HELP_INFO = [
         type: Boolean,
       },
       {
-        name: 'aliasName',
+        name: 'access',
         typeLabel: '{underline <name>}',
         description: 'Specify the key name.',
         alias: 'a',
@@ -96,7 +96,7 @@ export const INFO_HELP_INFO = [
         type: Boolean,
       },
       {
-        name: 'aliasName',
+        name: 'access',
         typeLabel: '{underline <name>}',
         description: 'Specify the key name.',
         alias: 'a',
@@ -113,8 +113,8 @@ export const INFO_HELP_INFO = [
   {
     header: 'CLI Examples',
     content: [
-      '$ s cli {bold fc-info} {bold info} [{bold --service-name} {underline serviceName}] [{bold --region} {underline region}] [{bold --aliasName} {underline aliasName}]',
-      '$ s cli {bold fc-info} {bold info} [{bold --service-name} {underline serviceName}] [{bold --function-name} {underline functionName}] [{bold --trigger-name} {underline functionNameA}] [{bold --trigger-name} {underline functionNameB}] [{bold --region} {underline region}] [{bold --aliasName} {underline aliasName}]',
+      '$ s cli {bold fc-info} {bold info} [{bold --service-name} {underline serviceName}] [{bold --region} {underline region}] [{bold --access} {underline accessName}]',
+      '$ s cli {bold fc-info} {bold info} [{bold --service-name} {underline serviceName}] [{bold --function-name} {underline functionName}] [{bold --trigger-name} {underline functionNameA}] [{bold --trigger-name} {underline functionNameB}] [{bold --region} {underline region}] [{bold --access} {underline access}]',
     ],
   },
 ];

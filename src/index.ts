@@ -31,13 +31,13 @@ export default class FcInfoComponent extends BaseComponent {
   private argsParser(args: string) {
     const apts: any = {
       boolean: ['help'],
-      alias: { help: 'h', region: 'r', aliasName: 'a'},
+      alias: { help: 'h', region: 'r', access: 'a'},
     };
     const comParse: any = core.commandParse({ args }, apts);
 
     // 将Args转成Object
     comParse.data = comParse.data || {};
-    const { region, aliasName } = comParse.data;
+    const { region, access } = comParse.data;
     const functionName: string = comParse.data['function-name'];
     const serviceName: string = comParse.data['service-name'];
     const triggerName: any = comParse.data['trigger-name'];
@@ -54,7 +54,7 @@ export default class FcInfoComponent extends BaseComponent {
       functionName,
       serviceName,
       triggerNames,
-      access: aliasName,
+      access,
       isHelp
     };
   }

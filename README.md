@@ -7,7 +7,7 @@ fc-info 用于获取远端函数计算资源
 ### s cli 方式
 
 ```
-$ s cli fc-info --region ${region} --aliasName ${access} --service-name ${serviceName} --function-name ${functionName} --trigger-name ${triggerName1} --trigger-name ${triggerName2}
+$ s cli fc-info --region ${region} --access ${access} --service-name ${serviceName} --function-name ${functionName} --trigger-name ${triggerName1} --trigger-name ${triggerName2}
 ```
 
 ### 应用编排使用方式

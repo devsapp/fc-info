@@ -234,8 +234,7 @@
 											"type": {
 												"type": "intrinsic",
 												"name": "any"
-											},
-											"defaultValue": "..."
+											}
 										},
 										{
 											"id": 16,
