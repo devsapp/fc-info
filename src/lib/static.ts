@@ -49,8 +49,8 @@ export const COMPONENT_HELP_INFO = [
 
 export const INFO_HELP_INFO = [
   {
-    header: 'Info resources',
-    content: 'Info resources, you can set attributes in command line or s.yml/yaml',
+    header: 'Info',
+    content: 'Query online resource details.',
   },
   {
     header: 'Usage',
@@ -61,26 +61,26 @@ export const INFO_HELP_INFO = [
     optionList: [
       {
         name: 'region',
-        typeLabel: '{underline <region>}',
+        typeLabel: '{underline string}',
         description: 'Specify the region of alicloud.',
         alias: 'r',
         type: String,
       },
       {
         name: 'service-name',
-        typeLabel: '{underline <serviceName>}',
+        typeLabel: '{underline string}',
         description: 'Specify the alicloud fc service name.',
         type: String,
       },
       {
         name: 'function-name',
-        typeLabel: '{underline <functionName>}',
+        typeLabel: '{underline string}',
         description: 'Specify the alicloud fc function name.',
         type: String,
       },
       {
         name: 'trigger-name',
-        typeLabel: '{underline <triggerName>}',
+        typeLabel: '{underline string}',
         description: 'Specify the alicloud fc trigger name, you can set names by using multiple trigger-name option, eg: --trigger-name triggerA --trigger-name triggerB.',
         type: String,
       },
@@ -97,24 +97,28 @@ export const INFO_HELP_INFO = [
       },
       {
         name: 'access',
-        typeLabel: '{underline <name>}',
-        description: 'Specify the key name.',
+        typeLabel: '{underline string}',
+        description: 'Specify key alias.',
         alias: 'a',
         type: String,
       },
     ],
   },
   {
-    header: 'YML Examples',
+    header: 'Examples with Yaml',
     content: [
       '$ s {bold info}',
+      '$ s <ProjectName> {bold info}',
     ],
   },
   {
-    header: 'CLI Examples',
+    header: 'Examples with CLI',
     content: [
       '$ s cli {bold fc-info} {bold info} [{bold --service-name} {underline serviceName}] [{bold --region} {underline region}] [{bold --access} {underline accessName}]',
-      '$ s cli {bold fc-info} {bold info} [{bold --service-name} {underline serviceName}] [{bold --function-name} {underline functionName}] [{bold --trigger-name} {underline functionNameA}] [{bold --trigger-name} {underline functionNameB}] [{bold --region} {underline region}] [{bold --access} {underline access}]',
+      '$ s cli {bold fc-info} {bold info} [{bold --service-name} {underline serviceName}] [{bold --function-name} {underline functionName}] [{bold --trigger-name} {underline functionNameA}] [{bold --trigger-name} {underline functionNameB}] [{bold --region} {underline region}] [{bold --access} {underline accessName}]',
+      `\nYou also can refer to the usage of fc-api and execute [s cli fc-api -h] for help.
+      $ s cli fc-api listSerices
+      $ s cli fc-api listFunctions --serviceName myService`
     ],
   },
 ];
