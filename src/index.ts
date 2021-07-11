@@ -40,6 +40,7 @@ export default class FcInfoComponent extends BaseComponent {
     const { region, access } = comParse.data;
     const functionName: string = comParse.data['function-name'];
     const serviceName: string = comParse.data['service-name'];
+    const infoType: string = comParse.data['info-type'];
     const triggerName: any = comParse.data['trigger-name'];
     const triggerNames: string[] = [];
     if (_.isString(triggerName)) {
@@ -52,6 +53,7 @@ export default class FcInfoComponent extends BaseComponent {
     return {
       region,
       functionName,
+      infoType,
       serviceName,
       triggerNames,
       access,
@@ -76,6 +78,7 @@ export default class FcInfoComponent extends BaseComponent {
       core.help(INFO_HELP_INFO);
       return;
     }
+    const infoType: string = inputs?.props?.infoType || parsedArgs?.infoType;
     const region: string = inputs?.props?.region || parsedArgs?.region;
     const serviceName: string = inputs?.props?.serviceName || parsedArgs?.serviceName;
     if (!serviceName) {
@@ -86,10 +89,10 @@ export default class FcInfoComponent extends BaseComponent {
     if (!functionName && !_.isEmpty(triggerNames)) {
       throw new Error(`Can not specify trigger without function.`);
     }
-    
-    
+
+
     const fcInfo: FcInfo = new FcInfo(credential, region);
-    return await fcInfo.info(serviceName, functionName, triggerNames);
+    return await fcInfo.info(serviceName, functionName, triggerNames, infoType);
   }
 
   public async help(inputs: InputProps): Promise<void> {

@@ -29,8 +29,11 @@ export default class FcInfo {
     });
   }
 
-  private async infoService(serviceName: string): Promise<ServiceConfig> {
+  private async infoService(serviceName: string, infoType?: string): Promise<ServiceConfig> {
     const { data } = await this.fcClient.getService(serviceName);
+    if(infoType){
+      return data
+    }
     logger.debug(`getService data: \n${JSON.stringify(data, null, '  ')}`);
     const { description, role, logConfig, vpcConfig, nasConfig, internetAccess } = data;
     const serviceConfig: ServiceConfig = {
@@ -80,8 +83,11 @@ export default class FcInfo {
     return serviceConfig;
   }
 
-  private async infoFunction(serviceName: string, functionName: string): Promise<FunctionConfig> {
+  private async infoFunction(serviceName: string, functionName: string, infoType?: string): Promise<FunctionConfig> {
     const { data } = await this.fcClient.getFunction(serviceName, functionName);
+    if(infoType){
+      return data
+    }
     logger.debug(`getFunction data: \n${JSON.stringify(data, null, '  ')}`);
     const {
       description,
@@ -142,8 +148,11 @@ export default class FcInfo {
     return functionConfig;
   }
 
-  private async infoTrigger(serviceName: string, functionName: string, triggerName: string): Promise<TriggerConfig> {
+  private async infoTrigger(serviceName: string, functionName: string, triggerName: string, infoType?: string): Promise<TriggerConfig> {
     const { data } = await this.fcClient.getTrigger(serviceName, functionName, triggerName);
+    if(infoType){
+      return data
+    }
     logger.debug(`getTrigger data: \n${JSON.stringify(data, null, '  ')}`);
     const { triggerConfig, qualifier, triggerType, sourceArn, invocationRole } = data;
     let type: string = triggerType.toLocaleLowerCase();
@@ -246,20 +255,20 @@ export default class FcInfo {
     return trigger;
   }
 
-  async info(serviceName: string, functionName?: string, triggerNames?: string[]): Promise<any> {
-    const serviceInfo: any = await this.infoService(serviceName);
+  async info(serviceName: string, functionName?: string, triggerNames?: string[], infoType?: string): Promise<any> {
+    const serviceInfo: any = await this.infoService(serviceName, infoType);
     const info: any = {
       service: serviceInfo
     };
     if (functionName) {
       Object.assign(info, {
-        function: await this.infoFunction(serviceName, functionName)
+        function: await this.infoFunction(serviceName, functionName, infoType)
       })
     }
     if (!_.isEmpty(triggerNames)) {
       Object.assign(info, { triggers: [] } );
       for (const triggerName of triggerNames) {
-        info.triggers.push(await this.infoTrigger(serviceName, functionName, triggerName));
+        info.triggers.push(await this.infoTrigger(serviceName, functionName, triggerName, infoType));
       }
     }
     return info;
