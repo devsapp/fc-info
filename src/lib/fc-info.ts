@@ -258,6 +258,10 @@ export default class FcInfo {
     return trigger;
   }
 
+  private async listTriggers(serviceName: string, functionName: string) {
+    return (await this.fcClient.listTriggers(serviceName, functionName)).data?.triggers || [];
+  }
+
   async info(serviceName: string, functionName?: string, triggerNames?: string[], infoType?: string): Promise<any> {
     const serviceInfo: any = await this.infoService(serviceName, infoType);
     const info: any = {
@@ -272,6 +276,14 @@ export default class FcInfo {
       Object.assign(info, { triggers: [] } );
       for (const triggerName of triggerNames) {
         info.triggers.push(await this.infoTrigger(serviceName, functionName, triggerName, infoType));
+      }
+    } else if (functionName && !infoType) {
+      const listTriggers = await this.listTriggers(serviceName, functionName);
+      if (!_.isEmpty(listTriggers)) {
+        Object.assign(info, { triggers: [] } );
+        for (const { triggerName } of listTriggers) {
+          info.triggers.push(await this.infoTrigger(serviceName, functionName, triggerName, infoType));
+        }
       }
     }
     return info;
