@@ -56,7 +56,7 @@
 					}
 				},
 				{
-					"id": 27,
+					"id": 28,
 					"name": "client",
 					"kind": 1024,
 					"kindString": "Property",
@@ -80,7 +80,7 @@
 					}
 				},
 				{
-					"id": 28,
+					"id": 29,
 					"name": "inputs",
 					"kind": 1024,
 					"kindString": "Property",
@@ -97,7 +97,7 @@
 					}
 				},
 				{
-					"id": 31,
+					"id": 32,
 					"name": "__doc",
 					"kind": 2048,
 					"kindString": "Method",
@@ -111,14 +111,14 @@
 					],
 					"signatures": [
 						{
-							"id": 32,
+							"id": 33,
 							"name": "__doc",
 							"kind": 4096,
 							"kindString": "Call signature",
 							"flags": {},
 							"parameters": [
 								{
-									"id": 33,
+									"id": 34,
 									"name": "projectName",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -147,7 +147,7 @@
 					}
 				},
 				{
-					"id": 29,
+					"id": 30,
 					"name": "__getBasePath",
 					"kind": 2048,
 					"kindString": "Method",
@@ -161,7 +161,7 @@
 					],
 					"signatures": [
 						{
-							"id": 30,
+							"id": 31,
 							"name": "__getBasePath",
 							"kind": 4096,
 							"kindString": "Call signature",
@@ -226,7 +226,7 @@
 									"flags": {},
 									"children": [
 										{
-											"id": 19,
+											"id": 20,
 											"name": "access",
 											"kind": 1024,
 											"kindString": "Property",
@@ -248,7 +248,18 @@
 											}
 										},
 										{
-											"id": 20,
+											"id": 17,
+											"name": "infoType",
+											"kind": 1024,
+											"kindString": "Property",
+											"flags": {},
+											"type": {
+												"type": "intrinsic",
+												"name": "string"
+											}
+										},
+										{
+											"id": 21,
 											"name": "isHelp",
 											"kind": 1024,
 											"kindString": "Property",
@@ -270,7 +281,7 @@
 											}
 										},
 										{
-											"id": 17,
+											"id": 18,
 											"name": "serviceName",
 											"kind": 1024,
 											"kindString": "Property",
@@ -281,7 +292,7 @@
 											}
 										},
 										{
-											"id": 18,
+											"id": 19,
 											"name": "triggerNames",
 											"kind": 1024,
 											"kindString": "Property",
@@ -300,12 +311,13 @@
 											"title": "Properties",
 											"kind": 1024,
 											"children": [
-												19,
-												16,
 												20,
-												15,
+												16,
 												17,
-												18
+												21,
+												15,
+												18,
+												19
 											]
 										}
 									]
@@ -315,7 +327,7 @@
 					]
 				},
 				{
-					"id": 24,
+					"id": 25,
 					"name": "help",
 					"kind": 2048,
 					"kindString": "Method",
@@ -325,20 +337,20 @@
 					"sources": [
 						{
 							"fileName": "index.ts",
-							"line": 96,
+							"line": 98,
 							"character": 19
 						}
 					],
 					"signatures": [
 						{
-							"id": 25,
+							"id": 26,
 							"name": "help",
 							"kind": 4096,
 							"kindString": "Call signature",
 							"flags": {},
 							"parameters": [
 								{
-									"id": 26,
+									"id": 27,
 									"name": "inputs",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -363,7 +375,7 @@
 					]
 				},
 				{
-					"id": 21,
+					"id": 22,
 					"name": "info",
 					"kind": 2048,
 					"kindString": "Method",
@@ -373,13 +385,13 @@
 					"sources": [
 						{
 							"fileName": "index.ts",
-							"line": 67,
+							"line": 69,
 							"character": 19
 						}
 					],
 					"signatures": [
 						{
-							"id": 22,
+							"id": 23,
 							"name": "info",
 							"kind": 4096,
 							"kindString": "Call signature",
@@ -390,7 +402,7 @@
 							},
 							"parameters": [
 								{
-									"id": 23,
+									"id": 24,
 									"name": "inputs",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -513,19 +525,19 @@
 					"title": "Properties",
 					"kind": 1024,
 					"children": [
-						27,
-						28
+						28,
+						29
 					]
 				},
 				{
 					"title": "Methods",
 					"kind": 2048,
 					"children": [
-						31,
-						29,
+						32,
+						30,
 						11,
-						24,
-						21,
+						25,
+						22,
 						5
 					]
 				}
