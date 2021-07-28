@@ -17,10 +17,11 @@ export default class FcInfo {
   functionName?: any;
   triggerNames?: any;
 
-  constructor(credentials: ICredentials, region) {
+  constructor(credentials: ICredentials, region, endpoint) {
     if (_.isNil(region)) { throw new Error('please provide region.'); }
     this.region = region;
     this.fcClient = new FC(credentials.AccountID, {
+      endpoint,
       accessKeyID: credentials.AccessKeyID,
       accessKeySecret: credentials.AccessKeySecret,
       securityToken: credentials.stsToken,

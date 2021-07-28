@@ -90,13 +90,21 @@ export default class FcInfoComponent extends BaseComponent {
       throw new Error(`Can not specify trigger without function.`);
     }
 
-
-    const fcInfo: FcInfo = new FcInfo(credential, region);
+    const endpoint = await this.getFcEndpoint();
+    const fcInfo: FcInfo = new FcInfo(credential, region, endpoint);
     return await fcInfo.info(serviceName, functionName, triggerNames, infoType);
   }
 
   public async help(inputs: InputProps): Promise<void> {
     await this.report('fc-info', 'help', null, inputs?.project?.access);
     core.help(COMPONENT_HELP_INFO);
+  }
+
+  private async getFcEndpoint(): Promise<string | undefined> {
+    const fcDefault = await core.loadComponent('devsapp/fc-default');
+    const fcEndpoint: string = await fcDefault.get({ args: 'fc-endpoint' });
+    if (!fcEndpoint) { return undefined; }
+    const enableFcEndpoint: any = await fcDefault.get({ args: 'enable-fc-endpoint' });
+    return (enableFcEndpoint === true || enableFcEndpoint === 'true') ? fcEndpoint : undefined;
   }
 }
