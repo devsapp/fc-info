@@ -5,7 +5,7 @@ export default class FcInfo {
     serviceName: string;
     functionName?: any;
     triggerNames?: any;
-    constructor(credentials: ICredentials, region: any);
+    constructor(credentials: ICredentials, region: any, endpoint: any);
     private infoService;
     private infoFunction;
     private infoTrigger;

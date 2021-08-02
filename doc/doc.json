@@ -56,7 +56,7 @@
 					}
 				},
 				{
-					"id": 28,
+					"id": 30,
 					"name": "client",
 					"kind": 1024,
 					"kindString": "Property",
@@ -80,7 +80,7 @@
 					}
 				},
 				{
-					"id": 29,
+					"id": 31,
 					"name": "inputs",
 					"kind": 1024,
 					"kindString": "Property",
@@ -97,7 +97,7 @@
 					}
 				},
 				{
-					"id": 32,
+					"id": 34,
 					"name": "__doc",
 					"kind": 2048,
 					"kindString": "Method",
@@ -111,14 +111,14 @@
 					],
 					"signatures": [
 						{
-							"id": 33,
+							"id": 35,
 							"name": "__doc",
 							"kind": 4096,
 							"kindString": "Call signature",
 							"flags": {},
 							"parameters": [
 								{
-									"id": 34,
+									"id": 36,
 									"name": "projectName",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -147,7 +147,7 @@
 					}
 				},
 				{
-					"id": 30,
+					"id": 32,
 					"name": "__getBasePath",
 					"kind": 2048,
 					"kindString": "Method",
@@ -161,7 +161,7 @@
 					],
 					"signatures": [
 						{
-							"id": 31,
+							"id": 33,
 							"name": "__getBasePath",
 							"kind": 4096,
 							"kindString": "Call signature",
@@ -322,6 +322,41 @@
 										}
 									]
 								}
+							}
+						}
+					]
+				},
+				{
+					"id": 28,
+					"name": "getFcEndpoint",
+					"kind": 2048,
+					"kindString": "Method",
+					"flags": {
+						"isPrivate": true
+					},
+					"sources": [
+						{
+							"fileName": "index.ts",
+							"line": 103,
+							"character": 29
+						}
+					],
+					"signatures": [
+						{
+							"id": 29,
+							"name": "getFcEndpoint",
+							"kind": 4096,
+							"kindString": "Call signature",
+							"flags": {},
+							"type": {
+								"type": "reference",
+								"typeArguments": [
+									{
+										"type": "intrinsic",
+										"name": "string"
+									}
+								],
+								"name": "Promise"
 							}
 						}
 					]
@@ -525,17 +560,18 @@
 					"title": "Properties",
 					"kind": 1024,
 					"children": [
-						28,
-						29
+						30,
+						31
 					]
 				},
 				{
 					"title": "Methods",
 					"kind": 2048,
 					"children": [
+						34,
 						32,
-						30,
 						11,
+						28,
 						25,
 						22,
 						5

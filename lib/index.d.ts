@@ -11,4 +11,5 @@ export default class FcInfoComponent extends BaseComponent {
      */
     info(inputs: InputProps): Promise<any>;
     help(inputs: InputProps): Promise<void>;
+    private getFcEndpoint;
 }
