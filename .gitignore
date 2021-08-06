@@ -2,3 +2,7 @@ node_modules
 package-lock.json
 .s
 .DS_Store
+
+.idea
+.vscode
+package-lock.json

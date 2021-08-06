@@ -1,7 +1,5 @@
-import BaseComponent from './common/base';
 import { InputProps } from './common/entity';
-export default class FcInfoComponent extends BaseComponent {
-    constructor(props: any);
+export default class FcInfoComponent {
     private report;
     private argsParser;
     /**

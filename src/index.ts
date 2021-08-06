@@ -1,4 +1,3 @@
-import BaseComponent from './common/base';
 import { InputProps, ICredentials } from './common/entity';
 import * as core from '@serverless-devs/core';
 import * as _ from 'lodash';
@@ -6,10 +5,7 @@ import { COMPONENT_HELP_INFO, INFO_HELP_INFO } from './lib/static';
 import FcInfo from './lib/fc-info';
 import logger from './common/logger';
 
-export default class FcInfoComponent extends BaseComponent {
-  constructor(props) {
-    super(props);
-  }
+export default class FcInfoComponent {
 
   private async report(componentName: string, command: string, accountID?: string, access?: string): Promise<void> {
     let uid: string = accountID;
