@@ -19,3 +19,8 @@ release-dev: push
 	-git tag -d dev
 	-git push origin :refs/tags/dev
 	gh release create dev --notes "dev release" --target dev --title "Release dev"
+
+roll-back-dev:
+	git reset --soft HEAD~1
+	git restore --staged publish.yaml
+	git restore publish.yaml
