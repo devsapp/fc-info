@@ -1,10 +1,51 @@
 Type: Component
 Name: fc-info
-Provider:
-  - 其它
 Version: 0.0.12
-Description: 初始化component模板
-HomePage: https://www.serverless-devs.com
-Tags: #标签详情
-  - 模板
-Category: 其它
+Category: 基础云产品
+HomePage: 'https://github.com/devsapp/fc'
+Tags:
+  - 函数计算
+Description: 阿里云函数计算基础组件
+Commands:
+  info: 用于获取远端函数计算资源
+Properties:
+  region:
+    Description: 地区
+    Required: true
+    Example: cn-shenzhen
+    Default: ''
+    Type:
+      - Enum:
+        - cn-beijing
+        - cn-hangzhou
+        - cn-shanghai
+        - cn-qingdao
+        - cn-zhangjiakou
+        - cn-huhehaote
+        - cn-shenzhen
+        - cn-chengdu
+        - cn-hongkong
+        - ap-southeast-1
+        - ap-southeast-2
+        - ap-southeast-3
+        - ap-southeast-5
+        - ap-northeast-1
+        - eu-central-1
+        - eu-west-1
+        - us-west-1
+        - us-east-1
+        - ap-south-1
+  serviceName:
+    Description: 服务名称
+    Required: true
+    Example: service-name
+    Default: ''
+    Type:
+      - String
+  functionName:
+    Description: 函数名称
+    Required: false
+    Example: function-name
+    Default: ''
+    Type:
+      - String

@@ -31,6 +31,7 @@
     "fix": "f2elint fix",
     "test": "jest --testNamePattern '^(?!Integration::)'",
     "test-integration": "jest --testNamePattern ^Integration::",
+    "test:cov": "jest --coverage",
     "doc": "npx typedoc src/index.ts --json doc/doc.json --out doc"
   },
   "dependencies": {
@@ -52,10 +53,14 @@
     "sinon": "^5.0.7",
     "ts-jest": "^26.2.0",
     "ts-node": "^8.10.2",
+    "jest": "^26.4.0",
+    "sinon": "^5.0.7",
+    "ts-jest": "^26.2.0",
+    "@types/jest": "^26.0.10",
     "typedoc": "^0.20.35",
     "typescript": "^3.9.7"
   },
-    "jest": {
+  "jest": {
     "preset": "ts-jest",
     "testEnvironment": "node"
   }
