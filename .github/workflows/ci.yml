@@ -1,0 +1,37 @@
+name: Serverless Devs Project CI
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: 12
+          registry-url: https://registry.npmjs.org/
+      - name: NPM install
+        run: |
+          npm install
+      - name: NPM install s
+        run: |
+          npm install -g @serverless-devs/s
+      - name: NPM run lint
+        run: |
+          npm run lint
+      - name: NPM run lint
+        run: |
+          npm run test
+      - name: EXPROT secrets
+        run: |
+          export AccountID=${{secrets.AccountID}} AccessKeyID=${{secrets.AccessKeyID}} AccessKeySecret=${{secrets.AccessKeySecret}}
+      - name: NPM run test-integration
+        run: |
+          npm run test-integration
