@@ -25,7 +25,13 @@
   "scripts": {
     "start": "npm run watch",
     "watch": "npm run doc && tsc -w",
-    "build": "rm -rf node_modules && rm -rf package-lock.json && npm i && ncc build src/index.ts -m -e @serverless-devs/core -o lib",
+    "prebuild": "rm -rf node_modules && rm -rf package-lock.json && npm i && rimraf lib",
+    "build": "npm run fix && npm run lint && ncc build src/index.ts -m -e @serverless-devs/core -o lib",
+    "lint": "f2elint scan",
+    "fix": "f2elint fix",
+    "test": "jest --testNamePattern '^(?!Integration::)'",
+    "test-integration": "jest --testNamePattern ^Integration::",
+    "test:cov": "jest --coverage",
     "doc": "npx typedoc src/index.ts --json doc/doc.json --out doc"
   },
   "dependencies": {
@@ -36,12 +42,26 @@
   },
   "devDependencies": {
     "@types/node": "^14.0.23",
-    "@typescript-eslint/eslint-plugin": "^3.10.0",
-    "@typescript-eslint/parser": "^3.10.0",
     "@zeit/ncc": "^0.22.3",
+    "@types/eslint": "^7.2.6",
+    "@types/jest": "^26.0.10",
+    "@types/node": "^14.0.23",
+    "dotenv": "^10.0.0",
     "eslint": "^7.7.0",
+    "f2elint": "^0.4.4",
+    "jest": "^26.4.0",
+    "sinon": "^5.0.7",
+    "ts-jest": "^26.2.0",
     "ts-node": "^8.10.2",
+    "jest": "^26.4.0",
+    "sinon": "^5.0.7",
+    "ts-jest": "^26.2.0",
+    "@types/jest": "^26.0.10",
     "typedoc": "^0.20.35",
     "typescript": "^3.9.7"
+  },
+  "jest": {
+    "preset": "ts-jest",
+    "testEnvironment": "node"
   }
 }
