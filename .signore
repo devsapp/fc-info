@@ -9,3 +9,5 @@ package-lok.json
 .github
 
 ./example
+.env
+coverage
