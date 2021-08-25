@@ -31,8 +31,8 @@ jobs:
           npm run test
       - name: integration test
         env:
-            AccountID: ${{secrets.AccountID}}
-            AccessKeyID: ${{secrets.AccessKeyID}}
-            AccessKeySecret: ${{secrets.AccessKeySecret}}
+            AccountID: ${{secrets.AccountID}} || ${{secrets.ACCOUNTID}} 
+            AccessKeyID: ${{secrets.AccessKeyID}} || ${{secrets.ACCESSKEYID}} 
+            AccessKeySecret: ${{secrets.AccessKeySecret}} || ${{secrets.ACCESSKEYSECRET}}
         run: |
-          npm run test-integration
+          sudo npm run test-integration
