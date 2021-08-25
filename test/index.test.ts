@@ -24,11 +24,11 @@ const inputs = {
   appName: 'fc-info-test',
   project: {
     component: 'devsapp/fc-info',
-    access: 'test',
+    access: name,
     projectName: 'test',
   },
   command: '',
-  args: '--region',
+  args: '',
   path: {
     configPath: path.join(process.cwd(), '..', 'example', 's.yaml'),
   },
@@ -40,10 +40,12 @@ describe('test/index.test.ts', () => {
       data: { name },
     });
     sandbox.stub(FC.prototype, 'listFunctions').resolves({
-      data: { functions: [{ name }],
-    } });
+      data: { functions: [{ name }],}
+    });
     sandbox.stub(FC.prototype, 'getFunction').resolves({
-      data: { functionName: name },
+    data: { functionName: name, 
+      handler: 'index.handler',
+      memorySize: 128, }
     });
     sandbox.stub(FC.prototype, 'getFunctionCode').resolves({
       data: { url: 'https://registry.devsapp.cn/simple/devsapp/fc-info/zipball/0.0.11' }
@@ -53,9 +55,11 @@ describe('test/index.test.ts', () => {
     });
     sandbox.stub(FC.prototype, 'getTrigger').resolves({
       data: {
-        triggerName: 'http',
+        triggerName: 'httpTrigger',
         triggerType: 'http',
-        triggerConfig: {},
+	triggerConfig: {
+          authType: 'anonymous',
+          methods: 'GET' },
       },
     });
   });
@@ -65,11 +69,43 @@ describe('test/index.test.ts', () => {
     await fse.remove(dir);
   });
 
-  it('info info', async () => {
+  it('info function', async () => {
     const inp = _.cloneDeep(inputs);
     inp.args = 'info';
     const result = await componentStarter.info(inp);
-    expect(Object.keys(result)).toEqual(['service', 'function', 'triggers']);
+    expect(result).toEqual({
+      function: {
+        handler: "index.handler",
+        instanceType: undefined, 
+        memorySize: 128, 
+        name: name,
+        runtime: undefined,
+        timeout: undefined
+      },
+      service: {
+        internetAccess: undefined,
+	name: "testSuite"
+      },
+      triggers: [{
+          config: {
+            authType: "anonymous",
+            methods: "GET",
+            qualifier: undefined
+          },
+          name: undefined,
+          type: "http"
+      }]
+    });
+  });
+
+  it('info with empty service name', async () => {
+      const inp = _.cloneDeep(inputs);
+      inp.props.serviceName = "";
+      try {
+          await componentStarter.info(inp);
+      } catch (e) {
+          expect(e).toEqual(new Error(`You must provide serviceName.`));
+      }
   });
 
   it('info help', async () => {
