@@ -12,7 +12,7 @@ describe('Integration::command', () => {
   const name = 'fc-info-testsuite'
   const serviceName = `service-${new Date().getTime()}-${Math.random().toString(36).substr(2)}`
   const funcName = `func-${new Date().getTime()}-${Math.random().toString(36).substr(2)}`
-  //const triggerName = `trigger-${new Date().getTime()}-${Math.random().toString(36).substr(2)}`
+  const triggerName = `trigger-${new Date().getTime()}-${Math.random().toString(36).substr(2)}`
 
   const inputs = {
     props: {
@@ -20,19 +20,14 @@ describe('Integration::command', () => {
       serviceName: serviceName,
       functionName: funcName,
     },
-    credentials: {
-      AccountID: process.env.AccountID,
-      AccessKeyID: process.env.AccessKeyID,
-      AccessKeySecret: process.env.AccessKeySecret,
-    },
     appName: 'fc-info-test',
     project: {
       component: 'devsapp/fc-info',
-      access: 'test',
+      access: name,
       projectName: 'test',
     },
     command: '',
-    args: '--region',
+    args: '',
     path: {
       configPath: path.join(process.cwd(), '..', 'example', 's.yaml'),
     },
@@ -47,10 +42,9 @@ describe('Integration::command', () => {
   beforeAll(async () => {
     await exec(`s config add --AccountID ${process.env.AccountID} --AccessKeyID ${process.env.AccessKeyID} --AccessKeySecret ${process.env.AccessKeySecret} -a ${name}`);
     // create service
-   try {
+    try {
       await client.createService(serviceName);
-
-   } catch (err) {
+    } catch (err) {
       console.error(err);
     }
   });
@@ -68,11 +62,11 @@ describe('Integration::command', () => {
   })
 
   // no trigger
-  it('info info', async () => {
+  it('info function without trigger', async () => {
     const zipFile = 'UEsDBAoAAAAIABULiFLOAhlFSQAAAE0AAAAIAAAAaW5kZXguanMdyMEJwCAMBdBVclNBskCxuxT9UGiJNgnFg8MX+o4Pc3R14/OQdkOpUFQ8mRQ2MtUujumJyv4PG6TFob3CjCEve78gtBaFkLYPUEsBAh4DCgAAAAgAFQuIUs4CGUVJAAAATQAAAAgAAAAAAAAAAAAAALSBAAAAAGluZGV4LmpzUEsFBgAAAAABAAEANgAAAG8AAAAAAA==';
     await client.createFunction(serviceName, {
           functionName: funcName,
-	  handler: 'index.handler',
+          handler: 'index.handler',
           memorySize: 128,
           runtime: 'nodejs12',
           code: {
@@ -84,11 +78,171 @@ describe('Integration::command', () => {
     inp.args = 'info';
     const componentStarter = new ComponentStarter();
     const result = await componentStarter.info(inp);
-    expect(Object.keys(result)).toEqual(['service','function',]);
+    expect(result).toEqual({
+      "function":{
+        "environmentVariables":{
+         },
+        "handler":"index.handler",
+        "initializationTimeout":3,
+        "instanceConcurrency":1,
+        "instanceType":"e1",
+        "memorySize":128,
+        "name":funcName,
+        "runtime":"nodejs12",
+        "timeout":3
+      },
+      "service":{
+        "internetAccess":true,
+        "name":serviceName
+      }
+    });
+  });
+
+  it('info with empty service name', async () => {
+      const inp = _.cloneDeep(inputs);
+      inp.props.serviceName = "";
+      const componentStarter = new ComponentStarter();
+ 
+      try {
+          await componentStarter.info(inp);
+      } catch (e) {
+          expect(e).toEqual(new Error(`You must provide serviceName.`));
+      }
+  });
+
+  it('info function with http trigger', async () => {
+    await client.createTrigger(serviceName, funcName, {
+        triggerName,
+        triggerType: 'http',
+        TriggerConfig: {
+            authType: 'anonymous',
+            methods: ['GET'],
+        }
+    });
+    const inp = _.cloneDeep(inputs);
+    inp.args = 'info';
+    const componentStarter = new ComponentStarter();
+    const result = await componentStarter.info(inp);
+    expect(result).toEqual({
+      "triggers":[
+        {
+          "config":{
+            "authType":"anonymous",
+            "methods":[
+              "GET"
+            ],
+            "qualifier":null
+          },
+          "name":triggerName,
+          "type":"http"
+        }
+      ],
+      "function":{
+        "environmentVariables":{
+        },
+        "handler":"index.handler",
+        "initializationTimeout":3,
+        "instanceConcurrency":1,
+        "instanceType":"e1",
+        "memorySize":128,
+        "name":funcName,
+        "runtime":"nodejs12",
+        "timeout":3
+      },
+      "service":{
+        "internetAccess":true,
+        "name":serviceName
+      }
+    });
+    try {
+        await client.deleteTrigger(serviceName, funcName, triggerName);
+    } catch(err) { console.log(err); }
+  });
+
+  it('info function with oss trigger', async () => {
+    const inp = _.cloneDeep(inputs);
+    const bucketName = `bucket-${new Date().getTime()}-${Math.random().toString(36).substr(2)}`
+    const arn = `acs:oss:cn-shenzhen:${process.env.AccountID}:${bucketName}`;
+    const role = `acs:ram::${process.env.AccountID}:role/AliyunOSSEventNotificationRole`;
+
+    // create bucket
+    let OSS = require('ali-oss');
+    let clientOSS = new OSS({
+      region: 'oss-cn-shenzhen',
+      accessKeyId: process.env.AccessKeyID,
+      accessKeySecret: process.env.AccessKeySecret,
+    });
 
     try {
-      await client.deleteFunction(serviceName, funcName);
-    } catch(err) { console.log(err); }
+      const options = {
+        storageClass: 'Standard',
+        acl: 'private',
+        dataRedundancyType: 'LRS',
+      }
+      await clientOSS.putBucket(bucketName, options);
+    } catch (err) {
+      console.log(err);
+    }
+
+    // create OSS trigger
+    await client.createTrigger(serviceName, funcName, {
+        triggerName,
+        triggerType: 'oss',
+	qualifier: "LATEST",
+	invocationRole: role,
+	sourceArn: arn,
+        triggerConfig: {
+          bucketName: bucketName,
+	  events: ["oss:ObjectCreated:*"],
+        }
+    });
+    inp.args = 'info';
+    const componentStarter = new ComponentStarter();
+    const result = await componentStarter.info(inp);
+    expect(result).toEqual({
+      "triggers":[
+        {
+          "config":{
+            "bucketName":bucketName,
+            "events":[
+              "oss:ObjectCreated:*"
+            ],
+            "filter":{
+              "Key":{
+                "Prefix":"",
+                "Suffix":""
+              }
+            },
+            "qualifier":"LATEST"
+          },
+          "name":triggerName,
+          "role":role,
+          "sourceArn":arn,
+          "type":"oss"
+        }
+      ],
+      "function":{
+        "environmentVariables":{
+        },
+        "handler":"index.handler",
+        "initializationTimeout":3,
+        "instanceConcurrency":1,
+        "instanceType":"e1",
+        "memorySize":128,
+        "name":funcName,
+        "runtime":"nodejs12",
+        "timeout":3
+      },
+      "service":{
+        "internetAccess":true,
+        "name":serviceName
+      }
+    })
+
+    try {
+        await client.deleteTrigger(serviceName, funcName, triggerName);
+        await client.deleteFunction(serviceName, funcName);
+	} catch(err) { console.log(err); }
   });
 
   it('info help', async () => {
@@ -96,7 +250,6 @@ describe('Integration::command', () => {
     inp.args = '--help';
     const componentStarter = new ComponentStarter();
     const result = await componentStarter.info(inp);
-    console.log('fc-info help: ', result);
     expect(result).toBeUndefined();
   });
 });

@@ -49,3 +49,10 @@ Properties:
     Default: ''
     Type:
       - String
+  triggerName:
+    Description: 
+    required: false
+    Example: trigger-name
+    Default: ''
+    Type:
+      - String

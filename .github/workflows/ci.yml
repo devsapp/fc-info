@@ -3,10 +3,10 @@ name: Serverless Devs Project CI
 on:
   push:
     branches:
-      - master
+      - main
   pull_request:
     branches:
-      - master
+      - main
 
 jobs:
   ci:
@@ -17,21 +17,22 @@ jobs:
         with:
           node-version: 12
           registry-url: https://registry.npmjs.org/
-      - name: NPM install
+      - name: install dependencies
         run: |
           npm install
-      - name: NPM install s
+      - name: install s
         run: |
           npm install -g @serverless-devs/s
-      - name: NPM run lint
+      - name: lint
         run: |
           npm run lint
-      - name: NPM run lint
+      - name: unit test 
         run: |
           npm run test
-      - name: EXPROT secrets
-        run: |
-          export AccountID=${{secrets.AccountID}} AccessKeyID=${{secrets.AccessKeyID}} AccessKeySecret=${{secrets.AccessKeySecret}}
-      - name: NPM run test-integration
+      - name: integration test
+        env:
+          AccountID: ${{secrets.ACCOUNTID}}
+          AccessKeyID: ${{secrets.ACCESSKEYID}}
+          AccessKeySecret: ${{secrets.ACCESSKEYSECRET}}
         run: |
           npm run test-integration
