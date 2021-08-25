@@ -28,7 +28,7 @@ const inputs = {
     projectName: 'test',
   },
   command: '',
-  args: '--region',
+  args: '',
   path: {
     configPath: path.join(process.cwd(), '..', 'example', 's.yaml'),
   },
@@ -40,10 +40,12 @@ describe('test/index.test.ts', () => {
       data: { name },
     });
     sandbox.stub(FC.prototype, 'listFunctions').resolves({
-      data: { functions: [{ name }],
-    } });
+      data: { functions: [{ name }],}
+    });
     sandbox.stub(FC.prototype, 'getFunction').resolves({
-      data: { functionName: name },
+    data: { functionName: name, 
+      handler: 'index.handler',
+      memorySize: 128, }
     });
     sandbox.stub(FC.prototype, 'getFunctionCode').resolves({
       data: { url: 'https://registry.devsapp.cn/simple/devsapp/fc-info/zipball/0.0.11' }
@@ -53,9 +55,11 @@ describe('test/index.test.ts', () => {
     });
     sandbox.stub(FC.prototype, 'getTrigger').resolves({
       data: {
-        triggerName: 'http',
+        triggerName: 'httpTrigger',
         triggerType: 'http',
-        triggerConfig: {},
+	triggerConfig: {
+          authType: 'anonymous',
+          methods: 'GET' },
       },
     });
   });
@@ -65,7 +69,7 @@ describe('test/index.test.ts', () => {
     await fse.remove(dir);
   });
 
-  it('info info', async () => {
+  it('info function', async () => {
     const inp = _.cloneDeep(inputs);
     inp.args = 'info';
     const result = await componentStarter.info(inp);

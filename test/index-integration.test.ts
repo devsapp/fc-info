@@ -20,11 +20,6 @@ describe('Integration::command', () => {
       serviceName: serviceName,
       functionName: funcName,
     },
-    credentials: {
-      AccountID: process.env.AccountID,
-      AccessKeyID: process.env.AccessKeyID,
-      AccessKeySecret: process.env.AccessKeySecret,
-    },
     appName: 'fc-info-test',
     project: {
       component: 'devsapp/fc-info',
@@ -32,7 +27,7 @@ describe('Integration::command', () => {
       projectName: 'test',
     },
     command: '',
-    args: '--region',
+    args: '',
     path: {
       configPath: path.join(process.cwd(), '..', 'example', 's.yaml'),
     },
@@ -68,11 +63,11 @@ describe('Integration::command', () => {
   })
 
   // no trigger
-  it('info info', async () => {
+  it('info function', async () => {
     const zipFile = 'UEsDBAoAAAAIABULiFLOAhlFSQAAAE0AAAAIAAAAaW5kZXguanMdyMEJwCAMBdBVclNBskCxuxT9UGiJNgnFg8MX+o4Pc3R14/OQdkOpUFQ8mRQ2MtUujumJyv4PG6TFob3CjCEve78gtBaFkLYPUEsBAh4DCgAAAAgAFQuIUs4CGUVJAAAATQAAAAgAAAAAAAAAAAAAALSBAAAAAGluZGV4LmpzUEsFBgAAAAABAAEANgAAAG8AAAAAAA==';
     await client.createFunction(serviceName, {
           functionName: funcName,
-	  handler: 'index.handler',
+          handler: 'index.handler',
           memorySize: 128,
           runtime: 'nodejs12',
           code: {
