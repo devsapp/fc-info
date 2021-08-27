@@ -23,7 +23,7 @@ describe('Integration::command', () => {
     appName: 'fc-info-test',
     project: {
       component: 'devsapp/fc-info',
-      access: 'test',
+      access: name,
       projectName: 'test',
     },
     command: '',

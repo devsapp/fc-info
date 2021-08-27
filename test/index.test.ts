@@ -16,15 +16,10 @@ const inputs = {
     serviceName: name,
     functionName: name,
   },
-  credentials: {
-    AccountID: 'AccountID',
-    AccessKeyID: 'AccessKeyID',
-    AccessKeySecret: 'AccessKeySecret',
-  },
   appName: 'fc-info-test',
   project: {
     component: 'devsapp/fc-info',
-    access: 'test',
+    access: name,
     projectName: 'test',
   },
   command: '',
