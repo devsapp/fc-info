@@ -36,7 +36,6 @@ describe('test/index.test.ts', () => {
 
   beforeEach(async () => {
     await exec(`s config add --AccountID ${process.env.AccountID} --AccessKeyID ${process.env.AccessKeyID} --AccessKeySecret ${process.env.AccessKeySecret} -a ${name}`);
-
     sandbox.stub(FC.prototype, 'getService').resolves({
       data: { name },
     });

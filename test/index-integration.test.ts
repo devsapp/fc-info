@@ -12,7 +12,7 @@ describe('Integration::command', () => {
   const name = 'fc-info-testsuite'
   const serviceName = `service-${new Date().getTime()}-${Math.random().toString(36).substr(2)}`
   const funcName = `func-${new Date().getTime()}-${Math.random().toString(36).substr(2)}`
-  //const triggerName = `trigger-${new Date().getTime()}-${Math.random().toString(36).substr(2)}`
+  const triggerName = `trigger-${new Date().getTime()}-${Math.random().toString(36).substr(2)}`
 
   const inputs = {
     props: {
@@ -42,10 +42,9 @@ describe('Integration::command', () => {
   beforeAll(async () => {
     await exec(`s config add --AccountID ${process.env.AccountID} --AccessKeyID ${process.env.AccessKeyID} --AccessKeySecret ${process.env.AccessKeySecret} -a ${name}`);
     // create service
-   try {
+    try {
       await client.createService(serviceName);
-
-   } catch (err) {
+    } catch (err) {
       console.error(err);
     }
   });
@@ -92,9 +91,26 @@ describe('Integration::command', () => {
       } catch (e) {
           expect(e).toEqual(new Error(`You must provide serviceName.`));
       }
-      try {
-          await client.deleteFunction(serviceName, funcName);
-      } catch(err) { console.log(err); }  
+  });
+
+  it('info function http trigger', async () => {
+    await client.createTrigger(serviceName, funcName, {
+        triggerName,
+        triggerType: 'http',
+        TriggerConfig: {
+            authType: 'anonymous',
+            methods: ['GET'],
+        }
+    });
+    const inp = _.cloneDeep(inputs);
+    inp.args = 'info';
+    const componentStarter = new ComponentStarter();
+    const result = await componentStarter.info(inp);
+    expect(result).toEqual({triggers: [{config: {authType: 'anonymous', methods: ['GET'], qualifier: null}, name: triggerName, type: 'http', }], function: {environmentVariables: {}, handler: "index.handler", initializationTimeout: 3, instanceConcurrency: 1, instanceType: "e1", memorySize: 128, name: funcName, runtime: "nodejs12", timeout: 3}, service: {internetAccess: true, name: serviceName}, });
+    try {
+        await client.deleteTrigger(serviceName, funcName, triggerName);
+        await client.deleteFunction(serviceName, funcName);
+    } catch(err) { console.log(err); }
   });
 
   it('info help', async () => {
@@ -102,7 +118,6 @@ describe('Integration::command', () => {
     inp.args = '--help';
     const componentStarter = new ComponentStarter();
     const result = await componentStarter.info(inp);
-    console.log('fc-info help: ', result);
     expect(result).toBeUndefined();
   });
 });
