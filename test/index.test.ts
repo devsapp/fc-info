@@ -17,6 +17,11 @@ const inputs = {
     functionName: name,
   },
   appName: 'fc-info-test',
+  credentials: {
+    AccountID: 'AccountID',
+    AccessKeyID: 'AccessKeyID',
+    AccessKeySecret: 'AccessKeySecret',
+  },
   project: {
     component: 'devsapp/fc-info',
     access: name,
@@ -68,7 +73,8 @@ describe('test/index.test.ts', () => {
     const inp = _.cloneDeep(inputs);
     inp.args = 'info';
     const result = await componentStarter.info(inp);
-    expect(Object.keys(result)).toEqual(['service', 'function', 'triggers']);
+    console.log(result);
+    expect(result).toEqual({function: {handler: "index.handler", instanceType: undefined, memorySize: 128, name: "testSuite", runtime: undefined, timeout: undefined}, service: {internetAccess: undefined, name: "testSuite"}, triggers: [{config: {authType: "anonymous", methods: "GET", qualifier: undefined}, name: undefined, type: "http"}]});
   });
 
   it('info help', async () => {

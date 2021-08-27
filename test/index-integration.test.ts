@@ -79,8 +79,7 @@ describe('Integration::command', () => {
     inp.args = 'info';
     const componentStarter = new ComponentStarter();
     const result = await componentStarter.info(inp);
-    expect(Object.keys(result)).toEqual(['service','function',]);
-
+    expect(result).toEqual({function: {environmentVariables: {}, handler: "index.handler", initializationTimeout: 3, instanceConcurrency: 1, instanceType: "e1", memorySize: 128, name: funcName, runtime: "nodejs12", timeout: 3}, service: {internetAccess: true, name: serviceName}, });
     try {
       await client.deleteFunction(serviceName, funcName);
     } catch(err) { console.log(err); }
