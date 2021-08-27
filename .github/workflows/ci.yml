@@ -35,4 +35,4 @@ jobs:
             AccessKeyID: ${{secrets.AccessKeyID}} || ${{secrets.ACCESSKEYID}} 
             AccessKeySecret: ${{secrets.AccessKeySecret}} || ${{secrets.ACCESSKEYSECRET}}
         run: |
-          sudo npm run test-integration
+          npm run test-integration
