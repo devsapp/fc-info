@@ -1,5 +1,7 @@
 import _ from 'lodash';
 import path from 'path';
+import dotenv from 'dotenv'
+import { exec } from 'child_process';
 import ComponentStarter from '../src/index';
 import sinon from 'sinon';
 import fse from 'fs-extra';
@@ -17,11 +19,6 @@ const inputs = {
     functionName: name,
   },
   appName: 'fc-info-test',
-  credentials: {
-    AccountID: 'AccountID',
-    AccessKeyID: 'AccessKeyID',
-    AccessKeySecret: 'AccessKeySecret',
-  },
   project: {
     component: 'devsapp/fc-info',
     access: name,
@@ -35,7 +32,11 @@ const inputs = {
 };
 
 describe('test/index.test.ts', () => {
+  dotenv.config();
+
   beforeEach(async () => {
+    await exec(`s config add --AccountID ${process.env.AccountID} --AccessKeyID ${process.env.AccessKeyID} --AccessKeySecret ${process.env.AccessKeySecret} -a ${name}`);
+
     sandbox.stub(FC.prototype, 'getService').resolves({
       data: { name },
     });
@@ -65,6 +66,7 @@ describe('test/index.test.ts', () => {
   });
 
   afterEach(async () => {
+    await exec(`s config delete -a ${name}`);
     sandbox.restore();
     await fse.remove(dir);
   });
