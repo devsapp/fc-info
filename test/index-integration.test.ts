@@ -80,9 +80,21 @@ describe('Integration::command', () => {
     const componentStarter = new ComponentStarter();
     const result = await componentStarter.info(inp);
     expect(result).toEqual({function: {environmentVariables: {}, handler: "index.handler", initializationTimeout: 3, instanceConcurrency: 1, instanceType: "e1", memorySize: 128, name: funcName, runtime: "nodejs12", timeout: 3}, service: {internetAccess: true, name: serviceName}, });
-    try {
-      await client.deleteFunction(serviceName, funcName);
-    } catch(err) { console.log(err); }
+  });
+
+  it('info no service name', async () => {
+      const inp = _.cloneDeep(inputs);
+      inp.props.serviceName = "";
+      const componentStarter = new ComponentStarter();
+ 
+      try {
+          await componentStarter.info(inp);
+      } catch (e) {
+          expect(e).toEqual(new Error(`You must provide serviceName.`));
+      }
+      try {
+          await client.deleteFunction(serviceName, funcName);
+      } catch(err) { console.log(err); }  
   });
 
   it('info help', async () => {

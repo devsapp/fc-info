@@ -73,8 +73,17 @@ describe('test/index.test.ts', () => {
     const inp = _.cloneDeep(inputs);
     inp.args = 'info';
     const result = await componentStarter.info(inp);
-    console.log(result);
-    expect(result).toEqual({function: {handler: "index.handler", instanceType: undefined, memorySize: 128, name: "testSuite", runtime: undefined, timeout: undefined}, service: {internetAccess: undefined, name: "testSuite"}, triggers: [{config: {authType: "anonymous", methods: "GET", qualifier: undefined}, name: undefined, type: "http"}]});
+    expect(result).toEqual({function: {handler: "index.handler", instanceType: undefined, memorySize: 128, name: name, runtime: undefined, timeout: undefined}, service: {internetAccess: undefined, name: "testSuite"}, triggers: [{config: {authType: "anonymous", methods: "GET", qualifier: undefined}, name: undefined, type: "http"}]});
+  });
+
+  it('info no service name', async () => {
+      const inp = _.cloneDeep(inputs);
+      inp.props.serviceName = "";
+      try {
+          await componentStarter.info(inp);
+      } catch (e) {
+          expect(e).toEqual(new Error(`You must provide serviceName.`));
+      }
   });
 
   it('info help', async () => {
