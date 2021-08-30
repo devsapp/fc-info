@@ -1,0 +1,38 @@
+name: Serverless Devs Project CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: 12
+          registry-url: https://registry.npmjs.org/
+      - name: install dependencies
+        run: |
+          npm install
+      - name: install s
+        run: |
+          npm install -g @serverless-devs/s
+      - name: lint
+        run: |
+          npm run lint
+      - name: unit test 
+        run: |
+          npm run test
+      - name: integration test
+        env:
+          AccountID: ${{secrets.ACCOUNTID}}
+          AccessKeyID: ${{secrets.ACCESSKEYID}}
+          AccessKeySecret: ${{secrets.ACCESSKEYSECRET}}
+        run: |
+          npm run test-integration

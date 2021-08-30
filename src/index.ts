@@ -68,7 +68,10 @@ export default class FcInfoComponent {
     // if (!access) {
     //   throw new Error(`You must provide access.`);
     // }
-    const credential: ICredentials = await core.getCredential(access);
+    let credential: ICredentials = inputs?.credentials;
+    if (_.isEmpty(credential)) {
+      credential = await core.getCredential(access);
+    }
     await this.report('fc-info', 'info', credential.AccountID, access);
     if (parsedArgs.isHelp) {
       core.help(INFO_HELP_INFO);
