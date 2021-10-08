@@ -6,6 +6,5 @@ package-lock.json
 .idea
 .vscode
 package-lock.json
-lib/
 .env
 coverage

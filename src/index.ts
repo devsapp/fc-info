@@ -6,7 +6,6 @@ import FcInfo from './lib/fc-info';
 import logger from './common/logger';
 
 export default class FcInfoComponent {
-
   private async report(componentName: string, command: string, accountID?: string, access?: string): Promise<void> {
     let uid: string = accountID;
     if (_.isEmpty(accountID)) {
@@ -27,7 +26,7 @@ export default class FcInfoComponent {
   private argsParser(args: string) {
     const apts: any = {
       boolean: ['help'],
-      alias: { help: 'h', region: 'r', access: 'a'},
+      alias: { help: 'h', region: 'r', access: 'a' },
     };
     const comParse: any = core.commandParse({ args }, apts);
 
@@ -53,7 +52,7 @@ export default class FcInfoComponent {
       serviceName,
       triggerNames,
       access,
-      isHelp
+      isHelp,
     };
   }
 
@@ -62,7 +61,7 @@ export default class FcInfoComponent {
    * @param inputs
    * @returns
    */
-  public async info(inputs: InputProps): Promise<any> {
+  async info(inputs: InputProps): Promise<any> {
     const parsedArgs: any = this.argsParser(inputs?.args);
     const access: string = inputs?.project?.access || parsedArgs?.access;
     // if (!access) {
@@ -81,12 +80,12 @@ export default class FcInfoComponent {
     const region: string = inputs?.props?.region || parsedArgs?.region;
     const serviceName: string = inputs?.props?.serviceName || parsedArgs?.serviceName;
     if (!serviceName) {
-      throw new Error(`You must provide serviceName.`);
+      throw new Error('You must provide serviceName.');
     }
     const functionName: string = inputs?.props?.functionName || parsedArgs?.functionName;
     const triggerNames: string[] = inputs?.props?.triggerNames || parsedArgs?.triggerNames;
     if (!functionName && !_.isEmpty(triggerNames)) {
-      throw new Error(`Can not specify trigger without function.`);
+      throw new Error('Can not specify trigger without function.');
     }
 
     const endpoint = await this.getFcEndpoint();
@@ -94,7 +93,7 @@ export default class FcInfoComponent {
     return await fcInfo.info(serviceName, functionName, triggerNames, infoType);
   }
 
-  public async help(inputs: InputProps): Promise<void> {
+  async help(inputs: InputProps): Promise<void> {
     await this.report('fc-info', 'help', null, inputs?.project?.access);
     core.help(COMPONENT_HELP_INFO);
   }

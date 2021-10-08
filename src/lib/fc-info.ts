@@ -32,9 +32,9 @@ export default class FcInfo {
 
   private async infoService(serviceName: string, infoType?: string): Promise<ServiceConfig> {
     const { data } = await this.fcClient.getService(serviceName);
-    if(infoType){
-      data['name'] = data.serviceName
-      return data
+    if (infoType) {
+      data.name = data.serviceName;
+      return data;
     }
     logger.debug(`getService data: \n${JSON.stringify(data, null, '  ')}`);
     const { description, role, logConfig, vpcConfig, nasConfig, internetAccess } = data;
@@ -87,9 +87,9 @@ export default class FcInfo {
 
   private async infoFunction(serviceName: string, functionName: string, infoType?: string): Promise<FunctionConfig> {
     const { data } = await this.fcClient.getFunction(serviceName, functionName);
-    if(infoType){
-      data['name'] = data.functionName
-      return data
+    if (infoType) {
+      data.name = data.functionName;
+      return data;
     }
     logger.debug(`getFunction data: \n${JSON.stringify(data, null, '  ')}`);
     const {
@@ -153,9 +153,9 @@ export default class FcInfo {
 
   private async infoTrigger(serviceName: string, functionName: string, triggerName: string, infoType?: string): Promise<TriggerConfig> {
     const { data } = await this.fcClient.getTrigger(serviceName, functionName, triggerName);
-    if(infoType){
-      data['name'] = data.triggerName
-      return data
+    if (infoType) {
+      data.name = data.triggerName;
+      return data;
     }
     logger.debug(`getTrigger data: \n${JSON.stringify(data, null, '  ')}`);
     const { triggerConfig, qualifier, triggerType, sourceArn, invocationRole } = data;
@@ -266,22 +266,22 @@ export default class FcInfo {
   async info(serviceName: string, functionName?: string, triggerNames?: string[], infoType?: string): Promise<any> {
     const serviceInfo: any = await this.infoService(serviceName, infoType);
     const info: any = {
-      service: serviceInfo
+      service: serviceInfo,
     };
     if (functionName) {
       Object.assign(info, {
-        function: await this.infoFunction(serviceName, functionName, infoType)
-      })
+        function: await this.infoFunction(serviceName, functionName, infoType),
+      });
     }
     if (!_.isEmpty(triggerNames)) {
-      Object.assign(info, { triggers: [] } );
+      Object.assign(info, { triggers: [] });
       for (const triggerName of triggerNames) {
         info.triggers.push(await this.infoTrigger(serviceName, functionName, triggerName, infoType));
       }
     } else if (functionName && !infoType) {
       const listTriggers = await this.listTriggers(serviceName, functionName);
       if (!_.isEmpty(listTriggers)) {
-        Object.assign(info, { triggers: [] } );
+        Object.assign(info, { triggers: [] });
         for (const { triggerName } of listTriggers) {
           info.triggers.push(await this.infoTrigger(serviceName, functionName, triggerName, infoType));
         }

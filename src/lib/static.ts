@@ -42,7 +42,7 @@ export const COMPONENT_HELP_INFO = [
   {
     header: 'CLI Examples',
     content: [
-      '$ s cli {bold fc-info} {bold info} {bold --help}'
+      '$ s cli {bold fc-info} {bold info} {bold --help}',
     ],
   },
 ];
@@ -118,7 +118,7 @@ export const INFO_HELP_INFO = [
       '$ s cli {bold fc-info} {bold info} [{bold --service-name} {underline serviceName}] [{bold --function-name} {underline functionName}] [{bold --trigger-name} {underline functionNameA}] [{bold --trigger-name} {underline functionNameB}] [{bold --region} {underline region}] [{bold --access} {underline accessName}]',
       `\nYou also can refer to the usage of fc-api and execute [s cli fc-api -h] for help.
       $ s cli fc-api listSerices
-      $ s cli fc-api listFunctions --serviceName myService`
+      $ s cli fc-api listFunctions --serviceName myService`,
     ],
   },
 ];
