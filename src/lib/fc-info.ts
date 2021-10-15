@@ -86,6 +86,7 @@ export default class FcInfo {
       initializer,
       initializationTimeout,
       memorySize,
+      gpuMemorySize,
       environmentVariables,
       instanceConcurrency,
       customContainerConfig,
@@ -110,6 +111,7 @@ export default class FcInfo {
       timeout,
       instanceType,
       memorySize,
+      gpuMemorySize: instanceType === 'g1' ? gpuMemorySize : undefined,
     };
 
     if (description) {
