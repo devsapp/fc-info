@@ -1,12 +1,8 @@
 import _ from 'lodash';
 import path from 'path';
 import ComponentStarter from '../src/index';
-import sinon from 'sinon';
 import fse from 'fs-extra';
 import FC from '@alicloud/fc2';
-
-const sandbox = sinon.createSandbox();
-const componentStarter = new ComponentStarter();
 
 const name = 'testSuite';
 const dir = './test/testInfo/';
@@ -35,25 +31,23 @@ const inputs = {
 };
 
 describe('test/index.test.ts', () => {
+  let componentStarter;
   beforeEach(async () => {
-    sandbox.stub(FC.prototype, 'getService').resolves({
-      data: { name },
+    const fcClient = new FC(inputs.credentials.AccountID, {
+      accessKeyID: inputs.credentials.AccessKeyID,
+      accessKeySecret: inputs.credentials.AccessKeySecret,
+      region: inputs.props.region,
     });
-    sandbox.stub(FC.prototype, 'listFunctions').resolves({
-      data: { functions: [{ name }],}
+    fcClient.getService = () => ({ data: { name } });
+    fcClient.listFunctions = () => ({ data: { functions: [{ name }], } });
+    fcClient.getFunction = () => ({
+      data: { functionName: name, 
+        handler: 'index.handler',
+        memorySize: 128, }
     });
-    sandbox.stub(FC.prototype, 'getFunction').resolves({
-    data: { functionName: name, 
-      handler: 'index.handler',
-      memorySize: 128, }
-    });
-    sandbox.stub(FC.prototype, 'getFunctionCode').resolves({
-      data: { url: 'https://registry.devsapp.cn/simple/devsapp/fc-info/zipball/0.0.11' }
-    });
-    sandbox.stub(FC.prototype, 'listTriggers').resolves({
-      data: { triggers: [{ name }] },
-    });
-    sandbox.stub(FC.prototype, 'getTrigger').resolves({
+    fcClient.getFunctionCode = () => ({ data: { url: 'https://registry.devsapp.cn/simple/devsapp/fc-info/zipball/0.0.11' } });
+    fcClient.listTriggers = () => ({ data: { triggers: [{ name }] }, });
+    fcClient.getTrigger = () => ({
       data: {
         triggerName: 'httpTrigger',
         triggerType: 'http',
@@ -62,10 +56,14 @@ describe('test/index.test.ts', () => {
           methods: 'GET' },
       },
     });
+
+
+    componentStarter = new ComponentStarter();
+    componentStarter.getFcClient = jest.fn();
+    componentStarter.getFcClient.mockReturnValue(fcClient)
   });
 
   afterEach(async () => {
-    sandbox.restore();
     await fse.remove(dir);
   });
 
@@ -101,6 +99,7 @@ describe('test/index.test.ts', () => {
   it('info with empty service name', async () => {
       const inp = _.cloneDeep(inputs);
       inp.props.serviceName = "";
+      const componentStarter = new ComponentStarter();
       try {
           await componentStarter.info(inp);
       } catch (e) {
@@ -111,6 +110,7 @@ describe('test/index.test.ts', () => {
   it('info help', async () => {
     const inp = _.cloneDeep(inputs);
     inp.args = `--help`;
+    const componentStarter = new ComponentStarter();
     const result = await componentStarter.info(inp);
     expect(result).toBeUndefined();
   });

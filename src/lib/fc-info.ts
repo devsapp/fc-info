@@ -1,33 +1,19 @@
 import * as _ from 'lodash';
-import { ICredentials } from '../common/entity';
 import { ServiceConfig, MountPoint } from './interface/fc-service';
 import { FunctionConfig, CustomContainerConfig } from './interface/fc-function';
 import { TriggerConfig } from './interface/fc-trigger';
 import logger from '../common/logger';
 
-const FC = require('@alicloud/fc2');
-
-const DEFAULT_CLIENT_TIMEOUT = 300;
-
 export default class FcInfo {
-  private fcClient: any;
-  private region: string;
-
   serviceName: string;
   functionName?: any;
   triggerNames?: any;
 
-  constructor(credentials: ICredentials, region, endpoint) {
-    if (_.isNil(region)) { throw new Error('please provide region.'); }
-    this.region = region;
-    this.fcClient = new FC(credentials.AccountID, {
-      endpoint,
-      accessKeyID: credentials.AccessKeyID,
-      accessKeySecret: credentials.AccessKeySecret,
-      securityToken: credentials.stsToken,
-      region: this.region,
-      timeout: DEFAULT_CLIENT_TIMEOUT * 1000,
-    });
+  private fcClient: any;
+
+  constructor(fcClient) {
+    console.log(fcClient);
+    this.fcClient = fcClient;
   }
 
   private async infoService(serviceName: string, infoType?: string): Promise<ServiceConfig> {
@@ -100,6 +86,7 @@ export default class FcInfo {
       initializer,
       initializationTimeout,
       memorySize,
+      gpuMemorySize,
       environmentVariables,
       instanceConcurrency,
       customContainerConfig,
@@ -124,6 +111,7 @@ export default class FcInfo {
       timeout,
       instanceType,
       memorySize,
+      gpuMemorySize: instanceType === 'g1' ? gpuMemorySize : undefined,
     };
 
     if (description) {
@@ -243,6 +231,8 @@ export default class FcInfo {
         };
         break;
       }
+      default:
+        logger.error(`No trigger type matching ${type}`);
     }
     const trigger: TriggerConfig = {
       name: triggerName,

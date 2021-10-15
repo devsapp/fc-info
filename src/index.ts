@@ -1,4 +1,4 @@
-import { InputProps, ICredentials } from './common/entity';
+import { InputProps } from './common/entity';
 import * as core from '@serverless-devs/core';
 import * as _ from 'lodash';
 import { COMPONENT_HELP_INFO, INFO_HELP_INFO } from './lib/static';
@@ -6,13 +6,7 @@ import FcInfo from './lib/fc-info';
 import logger from './common/logger';
 
 export default class FcInfoComponent {
-  private async report(componentName: string, command: string, accountID?: string, access?: string): Promise<void> {
-    let uid: string = accountID;
-    if (_.isEmpty(accountID)) {
-      const credentials: ICredentials = await core.getCredential(access);
-      uid = credentials.AccountID;
-    }
-
+  private async report(componentName: string, command: string, uid?: string): Promise<void> {
     try {
       core.reportComponent(componentName, {
         command,
@@ -63,15 +57,6 @@ export default class FcInfoComponent {
    */
   async info(inputs: InputProps): Promise<any> {
     const parsedArgs: any = this.argsParser(inputs?.args);
-    const access: string = inputs?.project?.access || parsedArgs?.access;
-    // if (!access) {
-    //   throw new Error(`You must provide access.`);
-    // }
-    let credential: ICredentials = inputs?.credentials;
-    if (_.isEmpty(credential)) {
-      credential = await core.getCredential(access);
-    }
-    await this.report('fc-info', 'info', credential.AccountID, access);
     if (parsedArgs.isHelp) {
       core.help(INFO_HELP_INFO);
       return;
@@ -88,21 +73,27 @@ export default class FcInfoComponent {
       throw new Error('Can not specify trigger without function.');
     }
 
-    const endpoint = await this.getFcEndpoint();
-    const fcInfo: FcInfo = new FcInfo(credential, region, endpoint);
+    const fcClient = await this.getFcClient(inputs, region);
+    await this.report('fc-info', 'info', fcClient?.accountid);
+    const fcInfo: FcInfo = new FcInfo(fcClient);
     return await fcInfo.info(serviceName, functionName, triggerNames, infoType);
   }
 
-  async help(inputs: InputProps): Promise<void> {
-    await this.report('fc-info', 'help', null, inputs?.project?.access);
+  async help(): Promise<void> {
+    await this.report('fc-info', 'help');
     core.help(COMPONENT_HELP_INFO);
   }
 
-  private async getFcEndpoint(): Promise<string | undefined> {
-    const fcDefault = await core.loadComponent('devsapp/fc-default');
-    const fcEndpoint: string = await fcDefault.get({ args: 'fc-endpoint' });
-    if (!fcEndpoint) { return undefined; }
-    const enableFcEndpoint: any = await fcDefault.get({ args: 'enable-fc-endpoint' });
-    return (enableFcEndpoint === true || enableFcEndpoint === 'true') ? fcEndpoint : undefined;
+  private async getFcClient(inputs, region): Promise<any> {
+    if (_.isEmpty(inputs.props)) {
+      // eslint-disable-next-line no-param-reassign
+      inputs.props = {};
+    }
+    if (_.isEmpty(inputs.props.region)) {
+      // eslint-disable-next-line no-param-reassign
+      inputs.props.region = region;
+    }
+    const fcCommon = await core.loadComponent('devsapp/fc-common');
+    return fcCommon.makeFcClient(inputs);
   }
 }
