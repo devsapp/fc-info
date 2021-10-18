@@ -27,7 +27,6 @@
     "watch": "tsc -w",
     "prebuild": "rm -rf node_modules && rm -rf package-lock.json && npm i && rimraf lib",
     "build": "npm run fix && npm run lint && ncc build src/index.ts -m -e @serverless-devs/core -o lib",
-    "postbuild": "npm run doc",
     "lint": "f2elint scan",
     "fix": "f2elint fix",
     "test": "jest --testNamePattern '^(?!Integration::)'",
