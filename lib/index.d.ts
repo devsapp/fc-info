@@ -8,6 +8,6 @@ export default class FcInfoComponent {
      * @returns
      */
     info(inputs: InputProps): Promise<any>;
-    help(inputs: InputProps): Promise<void>;
-    private getFcEndpoint;
+    help(): Promise<void>;
+    private getFcClient;
 }

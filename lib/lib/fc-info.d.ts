@@ -1,11 +1,9 @@
-import { ICredentials } from '../common/entity';
 export default class FcInfo {
-    private fcClient;
-    private region;
     serviceName: string;
     functionName?: any;
     triggerNames?: any;
-    constructor(credentials: ICredentials, region: any, endpoint: any);
+    private fcClient;
+    constructor(fcClient: any);
     private infoService;
     private infoFunction;
     private infoTrigger;

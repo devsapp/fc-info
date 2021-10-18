@@ -12,7 +12,6 @@ export default class FcInfo {
   private fcClient: any;
 
   constructor(fcClient) {
-    console.log(fcClient);
     this.fcClient = fcClient;
   }
 
