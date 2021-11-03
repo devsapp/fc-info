@@ -75,7 +75,7 @@ export default class FcInfoComponent {
 
     const fcClient = await this.getFcClient(inputs, region);
     await this.report('fc-info', 'info', fcClient?.accountid);
-    const fcInfo: FcInfo = new FcInfo(fcClient);
+    const fcInfo: FcInfo = new FcInfo(fcClient, region);
     return await fcInfo.info(serviceName, functionName, triggerNames, infoType);
   }
 
