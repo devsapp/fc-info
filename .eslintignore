@@ -1,6 +1,7 @@
 node_modules/
 test/
-dist/
+lib/
+example/
 doc/
 **/*.min.js
 **/*-min.js
