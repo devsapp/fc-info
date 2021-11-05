@@ -79,6 +79,7 @@ describe('Integration::command', () => {
     const componentStarter = new ComponentStarter();
     const result = await componentStarter.info(inp);
     expect(result).toEqual({
+      region: inp.props.region,
       "function":{
         "environmentVariables":{
          },
@@ -124,6 +125,7 @@ describe('Integration::command', () => {
     const componentStarter = new ComponentStarter();
     const result = await componentStarter.info(inp);
     expect(result).toEqual({
+      region: inp.props.region,
       "triggers":[
         {
           "config":{
@@ -200,6 +202,7 @@ describe('Integration::command', () => {
     const componentStarter = new ComponentStarter();
     const result = await componentStarter.info(inp);
     expect(result).toEqual({
+      region: inp.props.region,
       "triggers":[
         {
           "config":{

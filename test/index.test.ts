@@ -72,6 +72,7 @@ describe('test/index.test.ts', () => {
     inp.args = 'info';
     const result = await componentStarter.info(inp);
     expect(result).toEqual({
+      region: inp.props.region,
       function: {
         handler: "index.handler",
         instanceType: undefined, 
@@ -82,7 +83,7 @@ describe('test/index.test.ts', () => {
       },
       service: {
         internetAccess: undefined,
-	name: "testSuite"
+	      name: "testSuite"
       },
       triggers: [{
           config: {

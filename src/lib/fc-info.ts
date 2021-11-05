@@ -5,13 +5,15 @@ import { TriggerConfig } from './interface/fc-trigger';
 import logger from '../common/logger';
 
 export default class FcInfo {
+  region: string;
   serviceName: string;
   functionName?: any;
   triggerNames?: any;
 
   private fcClient: any;
 
-  constructor(fcClient) {
+  constructor(fcClient, region) {
+    this.region = region;
     this.fcClient = fcClient;
   }
 
@@ -255,6 +257,7 @@ export default class FcInfo {
   async info(serviceName: string, functionName?: string, triggerNames?: string[], infoType?: string): Promise<any> {
     const serviceInfo: any = await this.infoService(serviceName, infoType);
     const info: any = {
+      region: this.region,
       service: serviceInfo,
     };
     if (functionName) {
