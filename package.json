@@ -35,7 +35,7 @@
     "doc": "npx typedoc src/index.ts --json doc/doc.json --out doc"
   },
   "dependencies": {
-    "@serverless-devs/core": "^0.0.*",
+    "@serverless-devs/core": "latest",
     "ali-oss": "^6.16.0",
     "js-yaml": "^4.0.0",
     "lodash": "^4.17.21"
