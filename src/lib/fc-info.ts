@@ -135,7 +135,7 @@ export default class FcInfo {
       functionConfig.caPort = caPort;
     }
     if (!_.isNil(customDNS)) {
-      functionConfig.customDns = customDNS;
+      functionConfig.customDNS = customDNS;
     }
 
     if (environmentVariables) {

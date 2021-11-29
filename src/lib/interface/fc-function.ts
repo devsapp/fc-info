@@ -16,10 +16,10 @@ export interface FunctionConfig {
   initializer?: string;
   instanceConcurrency?: number;
   instanceType?: string;
-  customDns?: CustomDns;
+  customDNS?: CustomDNS;
 }
 
-export interface CustomDns {
+export interface CustomDNS {
   nameServers?: string[] | null;
   searches?: string[] | null;
   dnsOptions?: {
