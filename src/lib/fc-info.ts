@@ -93,6 +93,7 @@ export default class FcInfo {
       customContainerConfig,
       caPort,
       instanceType,
+      customDNS,
     } = data;
 
     let customContainer: CustomContainerConfig;
@@ -132,6 +133,9 @@ export default class FcInfo {
     }
     if (caPort) {
       functionConfig.caPort = caPort;
+    }
+    if (!_.isNil(customDNS)) {
+      functionConfig.customDns = customDNS;
     }
 
     if (environmentVariables) {
