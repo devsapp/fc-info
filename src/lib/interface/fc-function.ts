@@ -16,6 +16,16 @@ export interface FunctionConfig {
   initializer?: string;
   instanceConcurrency?: number;
   instanceType?: string;
+  customDNS?: CustomDNS;
+}
+
+export interface CustomDNS {
+  nameServers?: string[] | null;
+  searches?: string[] | null;
+  dnsOptions?:  Array<{
+    name: string;
+    value: string;
+  }> | null;
 }
 
 export interface CustomContainerConfig {
