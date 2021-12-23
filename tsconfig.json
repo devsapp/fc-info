@@ -24,11 +24,11 @@
       "./node_modules/@types"
     ],
     "rootDir": "src",
-    "outDir": "lib"
+    "outDir": "dist"
   },
   "exclude": [
     "node_modules",
-    "lib",
+    "dist",
     "doc",
     "example",
     "test"
