@@ -94,6 +94,7 @@ export default class FcInfo {
       caPort,
       instanceType,
       customDNS,
+      layers,
     } = data;
 
     let customContainer: CustomContainerConfig;
@@ -137,8 +138,11 @@ export default class FcInfo {
     if (!_.isNil(customDNS)) {
       functionConfig.customDNS = customDNS;
     }
+    if (!_.isEmpty(layers)) {
+      functionConfig.layers = layers;
+    }
 
-    if (environmentVariables) {
+    if (!_.isEmpty(environmentVariables)) {
       functionConfig.environmentVariables = environmentVariables;
     }
     return functionConfig;

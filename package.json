@@ -14,7 +14,7 @@
   "author": "Serverless-Devs",
   "contributors": [],
   "license": "MIT",
-  "main": "./lib/index.js",
+  "main": "./dist/index.js",
   "publishConfig": {
     "access": "public"
   },
@@ -25,17 +25,17 @@
   "scripts": {
     "start": "npm run watch",
     "watch": "tsc -w",
-    "prebuild": "rm -rf node_modules && rm -rf package-lock.json && npm i && rimraf lib",
-    "build": "npm run fix && npm run lint && ncc build src/index.ts -m -e @serverless-devs/core -o lib",
+    "prebuild": "rm -rf node_modules && rm -rf package-lock.json && npm i && rm -rf dist",
+    "build": "npm run fix && npm run lint && npm run esbuild",
+    "esbuild": "ncc build src/index.ts -m -e @serverless-devs/core -o dist",
     "lint": "f2elint scan",
     "fix": "f2elint fix",
     "test": "jest --testNamePattern '^(?!Integration::)'",
     "test-integration": "jest --testNamePattern ^Integration::",
-    "test:cov": "jest --coverage",
-    "doc": "npx typedoc src/index.ts --json doc/doc.json --out doc"
+    "test:cov": "jest --coverage"
   },
   "dependencies": {
-    "@serverless-devs/core": "^0.0.*",
+    "@serverless-devs/core": "latest",
     "ali-oss": "^6.16.0",
     "js-yaml": "^4.0.0",
     "lodash": "^4.17.21"
@@ -52,7 +52,6 @@
     "jest": "^26.4.0",
     "ts-jest": "^26.2.0",
     "ts-node": "^8.10.2",
-    "typedoc": "^0.20.35",
     "typescript": "^3.9.7"
   },
   "jest": {

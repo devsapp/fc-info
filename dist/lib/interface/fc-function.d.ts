@@ -16,6 +16,7 @@ export interface FunctionConfig {
     instanceConcurrency?: number;
     instanceType?: string;
     customDNS?: CustomDNS;
+    layers?: string[];
 }
 export interface CustomDNS {
     nameServers?: string[] | null;
