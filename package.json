@@ -27,7 +27,7 @@
     "watch": "tsc -w",
     "prebuild": "rm -rf node_modules && rm -rf package-lock.json && npm i && rm -rf dist",
     "build": "npm run fix && npm run lint && npm run esbuild",
-    "esbuild": "ncc build src/index.ts -m -e @serverless-devs/core -o dist",
+    "esbuild": "esbuild src/index.ts --bundle --log-level=error --minify --platform=node --format=cjs --target=node10.4 --external:@serverless-devs/core --outfile=dist/index.js",
     "lint": "f2elint scan",
     "fix": "f2elint fix",
     "test": "jest --testNamePattern '^(?!Integration::)'",
@@ -37,7 +37,6 @@
   "dependencies": {
     "@serverless-devs/core": "latest",
     "ali-oss": "^6.16.0",
-    "js-yaml": "^4.0.0",
     "lodash": "^4.17.21"
   },
   "devDependencies": {
@@ -47,6 +46,7 @@
     "@types/node": "^14.0.23",
     "@zeit/ncc": "^0.22.3",
     "dotenv": "^10.0.0",
+    "esbuild": "^0.14.8",
     "eslint": "^7.7.0",
     "f2elint": "^0.4.4",
     "jest": "^26.4.0",
