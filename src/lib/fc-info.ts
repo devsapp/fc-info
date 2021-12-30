@@ -1,4 +1,4 @@
-import * as _ from 'lodash';
+import _ from 'lodash';
 import { ServiceConfig, MountPoint } from './interface/fc-service';
 import { FunctionConfig, CustomContainerConfig } from './interface/fc-function';
 import { TriggerConfig } from './interface/fc-trigger';

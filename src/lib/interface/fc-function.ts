@@ -32,7 +32,7 @@ export interface FunctionConfig {
 export interface CustomDNS {
   nameServers?: string[] | null;
   searches?: string[] | null;
-  dnsOptions?:  Array<{
+  dnsOptions?: Array<{
     name: string;
     value: string;
   }> | null;
