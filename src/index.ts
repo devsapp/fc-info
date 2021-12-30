@@ -34,7 +34,7 @@ export default class FcInfoComponent {
     const triggerNames: string[] = [];
     if (_.isString(triggerName)) {
       triggerNames.push(triggerName);
-    } else {
+    } else if (!_.isNil(triggerName))  {
       triggerNames.push(...triggerName);
     }
     const isHelp: boolean = comParse.data.help;
