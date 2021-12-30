@@ -18,6 +18,15 @@ export interface FunctionConfig {
   instanceType?: string;
   customDNS?: CustomDNS;
   layers?: string[];
+  asyncConfiguration?: {
+    statefulInvocation?: boolean;
+    maxAsyncRetryAttempts?: number;
+    maxAsyncEventAgeInSeconds?: number;
+    destination?: {
+      onSuccess?: string;
+      onFailure?: string;
+    };
+  };
 }
 
 export interface CustomDNS {
