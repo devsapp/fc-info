@@ -74,8 +74,11 @@ export default class FcInfo {
 
   private async infoFunction(serviceName: string, functionName: string, infoType?: string): Promise<FunctionConfig> {
     const { data } = await this.fcClient.getFunction(serviceName, functionName);
+    const asyncConfig = await this.getFunctionAsyncConfig(serviceName, functionName);
+
     if (infoType) {
       data.name = data.functionName;
+      data.asyncConfiguration = asyncConfig;
       return data;
     }
     logger.debug(`getFunction data: \n${JSON.stringify(data, null, '  ')}`);
@@ -140,6 +143,9 @@ export default class FcInfo {
     }
     if (!_.isEmpty(layers)) {
       functionConfig.layers = layers;
+    }
+    if (!_.isNil(asyncConfig)) {
+      functionConfig.asyncConfiguration = asyncConfig;
     }
 
     if (!_.isEmpty(environmentVariables)) {
@@ -257,6 +263,22 @@ export default class FcInfo {
     }
     return trigger;
   }
+
+  private async getFunctionAsyncConfig(serviceName, functionName) {
+    try {
+      const { data } = await this.fcClient.getFunctionAsyncConfig(serviceName, functionName, 'LATEST');
+
+      return {
+        destinationConfig: data.destinationConfig,
+        maxAsyncEventAgeInSeconds: data.maxAsyncEventAgeInSeconds,
+        statefulInvocation: data.statefulInvocation,
+        maxAsyncRetryAttempts: data.maxAsyncRetryAttempts,
+      };
+    } catch (ex) {
+      logger.debug(`getFunctionAsyncConfig error code ${ex?.code}, error message: ${ex.message}`);
+    }
+  }
+
 
   private async listTriggers(serviceName: string, functionName: string) {
     return (await this.fcClient.listTriggers(serviceName, functionName)).data?.triggers || [];

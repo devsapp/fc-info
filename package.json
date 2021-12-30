@@ -23,11 +23,13 @@
     "url": "https://github.com/ServerlessTool/express-alibaba"
   },
   "scripts": {
+    "pre": "rm -rf node_modules && rm -rf package-lock.json && npm i",
+    "prebuild": "npm run pre",
+    "prestart": "npm run pre",
     "start": "npm run watch",
-    "watch": "tsc -w",
-    "prebuild": "rm -rf node_modules && rm -rf package-lock.json && npm i && rm -rf dist",
     "build": "npm run fix && npm run lint && npm run esbuild",
-    "esbuild": "esbuild src/index.ts --bundle --log-level=error --minify --platform=node --format=cjs --target=node10.4 --external:@serverless-devs/core --outfile=dist/index.js",
+    "watch": "tsc -w",
+    "esbuild": "rm -rf dist && esbuild src/index.ts --bundle --log-level=error --minify --platform=node --format=cjs --target=node10.4 --external:@serverless-devs/core --outfile=dist/index.js",
     "lint": "f2elint scan",
     "fix": "f2elint fix",
     "test": "jest --testNamePattern '^(?!Integration::)'",
