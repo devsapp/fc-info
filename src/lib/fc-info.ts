@@ -17,7 +17,7 @@ export default class FcInfo {
     this.fcClient = fcClient;
   }
 
-  private async infoService(serviceName: string, infoType?: string): Promise<ServiceConfig> {
+  private async infoService(serviceName: string, infoType?: boolean): Promise<ServiceConfig> {
     const { data } = await this.fcClient.getService(serviceName);
     if (infoType) {
       data.name = data.serviceName;
@@ -72,7 +72,7 @@ export default class FcInfo {
     return serviceConfig;
   }
 
-  private async infoFunction(serviceName: string, functionName: string, infoType?: string): Promise<FunctionConfig> {
+  private async infoFunction(serviceName: string, functionName: string, infoType?: boolean): Promise<FunctionConfig> {
     const { data } = await this.fcClient.getFunction(serviceName, functionName);
     const asyncConfig = await this.getFunctionAsyncConfig(serviceName, functionName);
 
@@ -154,7 +154,7 @@ export default class FcInfo {
     return functionConfig;
   }
 
-  private async infoTrigger(serviceName: string, functionName: string, triggerName: string, infoType?: string): Promise<TriggerConfig> {
+  private async infoTrigger(serviceName: string, functionName: string, triggerName: string, infoType?: boolean): Promise<TriggerConfig> {
     const { data } = await this.fcClient.getTrigger(serviceName, functionName, triggerName);
     if (infoType) {
       data.name = data.triggerName;
@@ -284,7 +284,32 @@ export default class FcInfo {
     return (await this.fcClient.listTriggers(serviceName, functionName)).data?.triggers || [];
   }
 
-  async info(serviceName: string, functionName?: string, triggerNames?: string[], infoType?: string): Promise<any> {
+  private async infoDomain(domainName: string, infoType: boolean) {
+    const { data } = await this.fcClient.getCustomDomain(domainName);
+    if (infoType) {
+      return data;
+    }
+    const res: any = {
+      domainName: data.domainName,
+      protocol: data.protocol,
+      routeConfigs: data.routeConfig.routes.map((item) => {
+        const route: any = {
+          path: item.path,
+          serviceName: item.serviceName,
+          functionName: item.functionName,
+          qualifier: item.qualifier,
+        };
+
+        return route;
+      }),
+    };
+    if (data.protocol === 'HTTP,HTTPS') {
+      res.certConfig = data.certConfig;
+    }
+    return res;
+  }
+
+  async info(serviceName: string, functionName?: string, triggerNames?: string[], domainNames?: string[], infoType?: boolean): Promise<any> {
     const serviceInfo: any = await this.infoService(serviceName, infoType);
     const info: any = {
       region: this.region,
@@ -309,6 +334,14 @@ export default class FcInfo {
         }
       }
     }
+
+    if (!_.isEmpty(domainNames)) {
+      Object.assign(info, { customDomains: [] });
+      for (const domainName of domainNames) {
+        info.customDomains.push(await this.infoDomain(domainName, infoType));
+      }
+    }
+
     return info;
   }
 }

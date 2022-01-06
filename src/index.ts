@@ -31,11 +31,18 @@ export default class FcInfoComponent {
     const serviceName: string = comParse.data['service-name'];
     const infoType: string = comParse.data['info-type'];
     const triggerName: any = comParse.data['trigger-name'];
+    const domainName: any = comParse.data['domain-name'];
     const triggerNames: string[] = [];
     if (_.isString(triggerName)) {
       triggerNames.push(triggerName);
-    } else if (!_.isNil(triggerName))  {
+    } else if (!_.isNil(triggerName)) {
       triggerNames.push(...triggerName);
+    }
+    const domainNames: string[] = [];
+    if (_.isString(domainName)) {
+      domainNames.push(domainName);
+    } else if (!_.isNil(domainName)) {
+      domainNames.push(...domainName);
     }
     const isHelp: boolean = comParse.data.help;
 
@@ -61,22 +68,37 @@ export default class FcInfoComponent {
       core.help(INFO_HELP_INFO);
       return;
     }
-    const infoType: string = inputs?.props?.infoType || parsedArgs?.infoType;
+    const fcCore = await core.load('devsapp/fc-core');
+
+    const infoType: boolean = inputs?.props?.infoType || parsedArgs?.infoType;
     const region: string = inputs?.props?.region || parsedArgs?.region;
     const serviceName: string = inputs?.props?.serviceName || parsedArgs?.serviceName;
     if (!serviceName) {
-      throw new Error('You must provide serviceName.');
+      throw new fcCore.CatchableError('serviceName is empty, can be specified by --service-name');
     }
     const functionName: string = inputs?.props?.functionName || parsedArgs?.functionName;
     const triggerNames: string[] = inputs?.props?.triggerNames || parsedArgs?.triggerNames;
     if (!functionName && !_.isEmpty(triggerNames)) {
-      throw new Error('Can not specify trigger without function.');
+      throw new fcCore.CatchableError('Can not specify trigger without functionName, can be specified by --function-name');
     }
 
-    const fcClient = await this.getFcClient(inputs, region);
-    await this.report('fc-info', 'info', fcClient?.accountid);
+    const fcClient = await fcCore.makeFcClient({
+      region,
+      access: inputs?.project?.access,
+      credentials: inputs.credentials,
+    });
+    const accountId = fcClient?.accountid;
+
+    let domainNames: string[] = inputs?.props?.customDomains || parsedArgs?.domainNames;
+    if (!_.isEmpty(domainNames)) {
+      domainNames = this.handlerDomains(fcCore, domainNames, {
+        accountId, region, serviceName, functionName,
+      });
+    }
+
+    await this.report('fc-info', 'info', accountId);
     const fcInfo: FcInfo = new FcInfo(fcClient, region);
-    return await fcInfo.info(serviceName, functionName, triggerNames, infoType);
+    return await fcInfo.info(serviceName, functionName, triggerNames, domainNames, infoType);
   }
 
   async help(): Promise<void> {
@@ -84,16 +106,18 @@ export default class FcInfoComponent {
     core.help(COMPONENT_HELP_INFO);
   }
 
-  private async getFcClient(inputs, region): Promise<any> {
-    if (_.isEmpty(inputs.props)) {
-      // eslint-disable-next-line no-param-reassign
-      inputs.props = {};
-    }
-    if (_.isEmpty(inputs.props.region)) {
-      // eslint-disable-next-line no-param-reassign
-      inputs.props.region = region;
-    }
-    const fcCommon = await core.loadComponent('devsapp/fc-common');
-    return fcCommon.makeFcClient(inputs);
+  private handlerDomains(fcCore: any, domainNames: string[], {
+    accountId, region, serviceName, functionName,
+  }) {
+    // 处理 domainName: auto
+    return domainNames.map((domainName) => {
+      if (fcCore.isAuto(domainName)) {
+        if (!functionName) {
+          throw new fcCore.CatchableError('domainName is auto, functionName cannot be empty, it can be specified by --function-name');
+        }
+        return fcCore.genDomainName(accountId, region, serviceName, functionName);
+      }
+      return domainName;
+    });
   }
 }
