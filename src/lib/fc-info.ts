@@ -98,6 +98,7 @@ export default class FcInfo {
       instanceType,
       customDNS,
       layers,
+      customRuntimeConfig,
     } = data;
 
     let customContainer: CustomContainerConfig;
@@ -107,6 +108,8 @@ export default class FcInfo {
         image: customContainerConfig.image,
         command: customContainerConfig.command,
         args: customContainerConfig.args,
+        instanceID: customContainerConfig?.instanceID,
+        accelerationType: customContainerConfig?.accelerationType,
       };
     }
 
@@ -137,6 +140,9 @@ export default class FcInfo {
     }
     if (caPort) {
       functionConfig.caPort = caPort;
+    }
+    if (runtime === 'custom' && !_.isEmpty(customRuntimeConfig?.command)) {
+      functionConfig.customRuntimeConfig = customRuntimeConfig;
     }
     if (!_.isNil(customDNS)) {
       functionConfig.customDNS = customDNS;

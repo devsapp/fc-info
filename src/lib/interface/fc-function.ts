@@ -4,6 +4,7 @@ export interface FunctionConfig {
   description?: string;
   caPort?: number;
   customContainerConfig?: CustomContainerConfig;
+  customRuntimeConfig?: CustomRuntimeConfig; 
   handler: string;
   memorySize?: number;
   gpuMemorySize?: number;
@@ -42,4 +43,11 @@ export interface CustomContainerConfig {
   image: string;
   command?: string;
   args?: string;
+  instanceID?: string;
+  accelerationType?: 'Default' | 'None';
+}
+
+export interface CustomRuntimeConfig {
+  command: string[];
+  args?: string[];
 }
