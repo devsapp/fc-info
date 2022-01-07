@@ -4,7 +4,7 @@ export interface FunctionConfig {
   description?: string;
   caPort?: number;
   customContainerConfig?: CustomContainerConfig;
-  customRuntimeConfig?: CustomRuntimeConfig; 
+  customRuntimeConfig?: CustomRuntimeConfig;
   handler: string;
   memorySize?: number;
   gpuMemorySize?: number;
