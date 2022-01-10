@@ -29,7 +29,8 @@ export default class FcInfoComponent {
     const { region, access } = comParse.data;
     const functionName: string = comParse.data['function-name'];
     const serviceName: string = comParse.data['service-name'];
-    const infoType: string = comParse.data['info-type'];
+    const outputFile: string = comParse.data.output;
+    const infoType: string = outputFile || comParse.data['info-type'];
     const triggerName: any = comParse.data['trigger-name'];
     const domainName: any = comParse.data['domain-name'];
     const triggerNames: string[] = [];
@@ -50,6 +51,7 @@ export default class FcInfoComponent {
       region,
       functionName,
       infoType,
+      outputFile,
       serviceName,
       triggerNames,
       access,
@@ -98,7 +100,13 @@ export default class FcInfoComponent {
 
     await this.report('fc-info', 'info', accountId);
     const fcInfo: FcInfo = new FcInfo(fcClient, region);
-    return await fcInfo.info(serviceName, functionName, triggerNames, domainNames, infoType);
+    const resInfo = await fcInfo.info(serviceName, functionName, triggerNames, domainNames, infoType);
+
+    if (parsedArgs.outputFile) {
+      await core.fse.outputFile(parsedArgs.outputFile, JSON.stringify(resInfo, null, 2));
+    }
+
+    return resInfo;
   }
 
   async help(): Promise<void> {
