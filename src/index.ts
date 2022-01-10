@@ -103,7 +103,17 @@ export default class FcInfoComponent {
     const resInfo = await fcInfo.info(serviceName, functionName, triggerNames, domainNames, infoType);
 
     if (parsedArgs.outputFile) {
-      await core.fse.outputFile(parsedArgs.outputFile, JSON.stringify(resInfo, null, 2));
+      let projectName = inputs?.project?.projectName || '';
+      if (projectName.endsWith('-devsapp/fc-info-project')) {
+        projectName = projectName.replace('-devsapp/fc-info-project', '');
+      }
+
+      let cache: any = {};
+      try {
+        cache = core.fse.readJsonSync(parsedArgs.outputFile);
+      } catch (_e) { /**/ }
+      cache[projectName] = resInfo;
+      await core.fse.outputFile(parsedArgs.outputFile, JSON.stringify(cache, null, 2));
     }
 
     return resInfo;
