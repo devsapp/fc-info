@@ -72,14 +72,14 @@ export default class FcInfoComponent {
     }
     const fcCore = await core.load('devsapp/fc-core');
 
-    const infoType: boolean = inputs?.props?.infoType || parsedArgs?.infoType;
-    const region: string = inputs?.props?.region || parsedArgs?.region;
-    const serviceName: string = inputs?.props?.serviceName || parsedArgs?.serviceName;
+    const infoType: boolean = parsedArgs?.infoType || inputs?.props?.infoType;
+    const region: string = parsedArgs?.region || inputs?.props?.region;
+    const serviceName: string = parsedArgs?.serviceName || inputs?.props?.serviceName;
     if (!serviceName) {
       throw new fcCore.CatchableError('serviceName is empty, can be specified by --service-name');
     }
-    const functionName: string = inputs?.props?.functionName || parsedArgs?.functionName;
-    const triggerNames: string[] = inputs?.props?.triggerNames || parsedArgs?.triggerNames;
+    const functionName: string = parsedArgs?.functionName || inputs?.props?.functionName;
+    const triggerNames: string[] = parsedArgs?.triggerNames || inputs?.props?.triggerNames;
     if (!functionName && !_.isEmpty(triggerNames)) {
       throw new fcCore.CatchableError('Can not specify trigger without functionName, can be specified by --function-name');
     }
@@ -91,7 +91,7 @@ export default class FcInfoComponent {
     });
     const accountId = fcClient?.accountid;
 
-    let domainNames: string[] = inputs?.props?.customDomains || parsedArgs?.domainNames;
+    let domainNames: string[] = parsedArgs?.domainNames || inputs?.props?.customDomains;
     if (!_.isEmpty(domainNames)) {
       domainNames = this.handlerDomains(fcCore, domainNames, {
         accountId, region, serviceName, functionName,
