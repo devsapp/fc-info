@@ -3,20 +3,8 @@ import * as core from '@serverless-devs/core';
 import * as _ from 'lodash';
 import { COMPONENT_HELP_INFO, INFO_HELP_INFO } from './lib/static';
 import FcInfo from './lib/fc-info';
-import logger from './common/logger';
 
 export default class FcInfoComponent {
-  private async report(componentName: string, command: string, uid?: string): Promise<void> {
-    try {
-      core.reportComponent(componentName, {
-        command,
-        uid,
-      });
-    } catch (e) {
-      logger.warning(`Component ${componentName} report error: ${e.message}`);
-    }
-  }
-
   private argsParser(args: string) {
     const apts: any = {
       boolean: ['help'],
@@ -79,7 +67,7 @@ export default class FcInfoComponent {
       throw new fcCore.CatchableError('serviceName is empty, can be specified by --service-name');
     }
     const functionName: string = parsedArgs?.functionName || inputs?.props?.functionName;
-    const triggerNames: string[] = parsedArgs?.triggerNames || inputs?.props?.triggerNames;
+    const triggerNames: string[] = _.isEmpty(parsedArgs?.triggerNames) ? inputs?.props?.triggerNames : parsedArgs?.triggerNames;
     if (!functionName && !_.isEmpty(triggerNames)) {
       throw new fcCore.CatchableError('Can not specify trigger without functionName, can be specified by --function-name');
     }
@@ -98,7 +86,6 @@ export default class FcInfoComponent {
       });
     }
 
-    await this.report('fc-info', 'info', accountId);
     const fcInfo: FcInfo = new FcInfo(fcClient, region);
     const resInfo = await fcInfo.info(serviceName, functionName, triggerNames, domainNames, infoType);
 
@@ -120,7 +107,6 @@ export default class FcInfoComponent {
   }
 
   async help(): Promise<void> {
-    await this.report('fc-info', 'help');
     core.help(COMPONENT_HELP_INFO);
   }
 
