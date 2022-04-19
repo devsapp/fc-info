@@ -267,6 +267,10 @@ export default class FcInfo {
     if (sourceArn) {
       trigger.sourceArn = sourceArn;
     }
+    if (data.urlInternet) {
+      trigger.urlInternet = data.urlInternet;
+    }
+
     return trigger;
   }
 

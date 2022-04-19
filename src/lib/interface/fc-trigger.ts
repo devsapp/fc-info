@@ -5,6 +5,7 @@ export interface TriggerConfig {
   type: 'oss' | 'log' | 'timer' | 'http' | 'mnsTopic' | 'cdnEvents';
   role?: string;
   sourceArn?: string;
+  urlInternet?: string;
   config: OssTriggerConfig | LogTriggerConfig | TimerTriggerConfig | HttpTriggerConfig | MnsTriggerConfig | CdnTriggerConfig;
 }
 
