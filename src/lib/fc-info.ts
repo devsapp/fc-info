@@ -311,6 +311,7 @@ export default class FcInfo {
     };
     if (data.protocol === 'HTTP,HTTPS') {
       res.certConfig = data.certConfig;
+      res.tlsConfig = data.tlsConfig;
     }
     return res;
   }
