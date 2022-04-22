@@ -267,6 +267,10 @@ export default class FcInfo {
     if (sourceArn) {
       trigger.sourceArn = sourceArn;
     }
+    if (data.urlInternet) {
+      trigger.urlInternet = data.urlInternet;
+    }
+
     return trigger;
   }
 
@@ -311,6 +315,7 @@ export default class FcInfo {
     };
     if (data.protocol === 'HTTP,HTTPS') {
       res.certConfig = data.certConfig;
+      res.tlsConfig = data.tlsConfig;
     }
     return res;
   }
