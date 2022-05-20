@@ -160,8 +160,11 @@ export default class FcInfo {
     return functionConfig;
   }
 
-  private async infoTrigger(serviceName: string, functionName: string, triggerName: string, infoType?: boolean): Promise<TriggerConfig> {
-    const { data } = await this.fcClient.getTrigger(serviceName, functionName, triggerName);
+  private async infoTrigger(serviceName: string, functionName: string, triggerName: string, infoType: boolean, triggerData?): Promise<TriggerConfig> {
+    let data = triggerData;
+    if (_.isEmpty(triggerData)) {
+      data = (await this.fcClient.getTrigger(serviceName, functionName, triggerName)).data;
+    }
     if (infoType) {
       data.name = data.triggerName;
       return data;
@@ -252,6 +255,10 @@ export default class FcInfo {
         };
         break;
       }
+      case 'eventbridge': {
+        config = triggerConfig;
+        break;
+      }
       default:
         logger.error(`No trigger type matching ${type}`);
     }
@@ -334,14 +341,15 @@ export default class FcInfo {
     if (!_.isEmpty(triggerNames)) {
       Object.assign(info, { triggers: [] });
       for (const triggerName of triggerNames) {
-        info.triggers.push(await this.infoTrigger(serviceName, functionName, triggerName, infoType));
+        info.triggers.push(await this.infoTrigger(serviceName, functionName, triggerName, infoType, undefined));
       }
     } else if (functionName && !infoType) {
       const listTriggers = await this.listTriggers(serviceName, functionName);
       if (!_.isEmpty(listTriggers)) {
         Object.assign(info, { triggers: [] });
-        for (const { triggerName } of listTriggers) {
-          info.triggers.push(await this.infoTrigger(serviceName, functionName, triggerName, infoType));
+        for (const triggerConfig of listTriggers) {
+          const { triggerName } = triggerConfig;
+          info.triggers.push(await this.infoTrigger(serviceName, functionName, triggerName, infoType, triggerConfig));
         }
       }
     }

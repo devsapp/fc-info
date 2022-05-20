@@ -82,7 +82,10 @@ export default class FcInfoComponent {
     let domainNames: string[] = parsedArgs?.domainNames || inputs?.props?.customDomains;
     if (!_.isEmpty(domainNames)) {
       domainNames = this.handlerDomains(fcCore, domainNames, {
-        accountId, region, serviceName, functionName,
+        accountId,
+        region,
+        serviceName,
+        functionName,
       });
     }
 
@@ -98,7 +101,9 @@ export default class FcInfoComponent {
       let cache: any = {};
       try {
         cache = core.fse.readJsonSync(parsedArgs.outputFile);
-      } catch (_e) { /**/ }
+      } catch (_e) {
+        /**/
+      }
       cache[projectName] = resInfo;
       await core.fse.outputFile(parsedArgs.outputFile, JSON.stringify(cache, null, 2));
     }
@@ -110,9 +115,7 @@ export default class FcInfoComponent {
     core.help(COMPONENT_HELP_INFO);
   }
 
-  private handlerDomains(fcCore: any, domainNames: string[], {
-    accountId, region, serviceName, functionName,
-  }) {
+  private handlerDomains(fcCore: any, domainNames: string[], { accountId, region, serviceName, functionName }) {
     // 处理 domainName: auto
     return domainNames.map((domainName) => {
       if (fcCore.isAuto(domainName)) {
