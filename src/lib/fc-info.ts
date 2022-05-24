@@ -257,6 +257,20 @@ export default class FcInfo {
       }
       case 'eventbridge': {
         config = triggerConfig;
+        if (triggerConfig.eventSourceType === 'RocketMQ') {
+          delete config.sourceMNSParameters;
+          delete config.sourceRabbitMQParameters;
+        } else if (triggerConfig.eventSourceType === 'Default') {
+          delete config.sourceMNSParameters;
+          delete config.sourceRabbitMQParameters;
+          delete config.sourceRocketMQParameters;
+        } else if (triggerConfig.eventSourceType === 'MNS') {
+          delete config.sourceRabbitMQParameters;
+          delete config.sourceRocketMQParameters;
+        } else if (triggerConfig.eventSourceType === 'RabbitMQ') {
+          delete config.sourceMNSParameters;
+          delete config.sourceRocketMQParameters;
+        }
         break;
       }
       default:
