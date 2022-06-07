@@ -3,6 +3,7 @@ import { ServiceConfig, MountPoint } from './interface/fc-service';
 import { FunctionConfig, CustomContainerConfig } from './interface/fc-function';
 import { TriggerConfig } from './interface/fc-trigger';
 import logger from '../common/logger';
+import { ENABLE_EB_TRIGGER_HEADER } from './static';
 
 export default class FcInfo {
   region: string;
@@ -163,7 +164,7 @@ export default class FcInfo {
   private async infoTrigger(serviceName: string, functionName: string, triggerName: string, infoType: boolean, triggerData?): Promise<TriggerConfig> {
     let data = triggerData;
     if (_.isEmpty(triggerData)) {
-      data = (await this.fcClient.getTrigger(serviceName, functionName, triggerName)).data;
+      data = (await this.fcClient.getTrigger(serviceName, functionName, triggerName, ENABLE_EB_TRIGGER_HEADER)).data;
     }
     if (infoType) {
       data.name = data.triggerName;
@@ -257,19 +258,18 @@ export default class FcInfo {
       }
       case 'eventbridge': {
         config = triggerConfig;
-        if (triggerConfig.eventSourceType === 'RocketMQ') {
-          delete config.sourceMNSParameters;
-          delete config.sourceRabbitMQParameters;
-        } else if (triggerConfig.eventSourceType === 'Default') {
-          delete config.sourceMNSParameters;
-          delete config.sourceRabbitMQParameters;
-          delete config.sourceRocketMQParameters;
-        } else if (triggerConfig.eventSourceType === 'MNS') {
-          delete config.sourceRabbitMQParameters;
-          delete config.sourceRocketMQParameters;
-        } else if (triggerConfig.eventSourceType === 'RabbitMQ') {
-          delete config.sourceMNSParameters;
-          delete config.sourceRocketMQParameters;
+        const eventSourceType = triggerConfig.eventSourceConfig?.eventSourceType;
+        if (eventSourceType === 'RocketMQ') {
+          delete config.eventSourceConfig?.eventSourceParameters?.sourceMNSParameters;
+          delete config.eventSourceConfig?.eventSourceParameters?.sourceRabbitMQParameters;
+        } else if (eventSourceType === 'Default') {
+          delete config.eventSourceConfig;
+        } else if (eventSourceType === 'MNS') {
+          delete config.eventSourceConfig?.eventSourceParameters?.sourceRabbitMQParameters;
+          delete config.eventSourceConfig?.eventSourceParameters?.sourceRocketMQParameters;
+        } else if (eventSourceType === 'RabbitMQ') {
+          delete config.eventSourceConfig?.eventSourceParameters?.sourceMNSParameters;
+          delete config.eventSourceConfig?.eventSourceParameters?.sourceRocketMQParameters;
         }
         break;
       }
@@ -312,7 +312,7 @@ export default class FcInfo {
 
 
   private async listTriggers(serviceName: string, functionName: string) {
-    return (await this.fcClient.listTriggers(serviceName, functionName)).data?.triggers || [];
+    return (await this.fcClient.listTriggers(serviceName, functionName, ENABLE_EB_TRIGGER_HEADER)).data?.triggers || [];
   }
 
   private async infoDomain(domainName: string, infoType: boolean) {

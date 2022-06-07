@@ -122,3 +122,7 @@ export const INFO_HELP_INFO = [
     ],
   },
 ];
+
+export const ENABLE_EB_TRIGGER_HEADER = {
+  'x-fc-enable-eventbridge-trigger': 'enable',
+}
