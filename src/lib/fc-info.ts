@@ -312,7 +312,7 @@ export default class FcInfo {
 
 
   private async listTriggers(serviceName: string, functionName: string) {
-    return (await this.fcClient.listTriggers(serviceName, functionName, ENABLE_EB_TRIGGER_HEADER)).data?.triggers || [];
+    return (await this.fcClient.listTriggers(serviceName, functionName, undefined, ENABLE_EB_TRIGGER_HEADER)).data?.triggers || [];
   }
 
   private async infoDomain(domainName: string, infoType: boolean) {
