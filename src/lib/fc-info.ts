@@ -233,6 +233,9 @@ export default class FcInfo {
           functionParameter: triggerConfig.functionParameter,
           enable: triggerConfig.enable,
         };
+        if (!_.isEmpty(triggerConfig?.targetConfig)) {
+          config.targetConfig = triggerConfig.targetConfig;
+        }
         break;
       case 'mns_topic': {
         const arnConfig = sourceArn.split(':');
@@ -266,7 +269,7 @@ export default class FcInfo {
           MNS: ['sourceRabbitMQParameters', 'sourceKafkaParameters', 'sourceRocketMQParameters'],
           RabbitMQ: ['sourceMNSParameters', 'sourceKafkaParameters', 'sourceRocketMQParameters'],
           Kafka: ['sourceMNSParameters', 'sourceRabbitMQParameters', 'sourceRocketMQParameters'],
-        }
+        };
         if (deleteKeys[eventSourceType]) {
           for (const item of deleteKeys[eventSourceType]) {
             delete config.eventSourceConfig?.eventSourceParameters?.[item];
