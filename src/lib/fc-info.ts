@@ -229,6 +229,7 @@ export default class FcInfo {
             logStore: triggerConfig.logConfig.logstore,
             project: triggerConfig.logConfig.project,
           },
+          // triggerConfig: triggerConfig.triggerConfig,
           functionParameter: triggerConfig.functionParameter,
           enable: triggerConfig.enable,
         };
@@ -259,17 +260,17 @@ export default class FcInfo {
       case 'eventbridge': {
         config = triggerConfig;
         const eventSourceType = triggerConfig.eventSourceConfig?.eventSourceType;
-        if (eventSourceType === 'RocketMQ') {
-          delete config.eventSourceConfig?.eventSourceParameters?.sourceMNSParameters;
-          delete config.eventSourceConfig?.eventSourceParameters?.sourceRabbitMQParameters;
-        } else if (eventSourceType === 'Default') {
-          delete config.eventSourceConfig;
-        } else if (eventSourceType === 'MNS') {
-          delete config.eventSourceConfig?.eventSourceParameters?.sourceRabbitMQParameters;
-          delete config.eventSourceConfig?.eventSourceParameters?.sourceRocketMQParameters;
-        } else if (eventSourceType === 'RabbitMQ') {
-          delete config.eventSourceConfig?.eventSourceParameters?.sourceMNSParameters;
-          delete config.eventSourceConfig?.eventSourceParameters?.sourceRocketMQParameters;
+        const deleteKeys = {
+          RocketMQ: ['sourceMNSParameters', 'sourceRabbitMQParameters', 'sourceKafkaParameters'],
+          Default: ['eventSourceConfig'],
+          MNS: ['sourceRabbitMQParameters', 'sourceKafkaParameters', 'sourceRocketMQParameters'],
+          RabbitMQ: ['sourceMNSParameters', 'sourceKafkaParameters', 'sourceRocketMQParameters'],
+          Kafka: ['sourceMNSParameters', 'sourceRabbitMQParameters', 'sourceRocketMQParameters'],
+        }
+        if (deleteKeys[eventSourceType]) {
+          for (const item of deleteKeys[eventSourceType]) {
+            delete config.eventSourceConfig?.eventSourceParameters?.[item];
+          }
         }
         break;
       }
