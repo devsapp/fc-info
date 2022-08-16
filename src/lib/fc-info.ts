@@ -48,7 +48,7 @@ export default class FcInfo {
     }
     if (nasConfig && nasConfig.mountPoints.length > 0) {
       const handlerDir = ({ serverAddr, mountDir }) => {
-        const subscript: string = serverAddr.indexOf(':/');
+        const subscript: number = serverAddr.indexOf(':/');
         const itemConfig: MountPoint = {
           serverAddr: serverAddr.substr(0, subscript),
           nasDir: serverAddr.substr(subscript + 1),
@@ -229,9 +229,13 @@ export default class FcInfo {
             logStore: triggerConfig.logConfig.logstore,
             project: triggerConfig.logConfig.project,
           },
+          // triggerConfig: triggerConfig.triggerConfig,
           functionParameter: triggerConfig.functionParameter,
           enable: triggerConfig.enable,
         };
+        if (!_.isEmpty(triggerConfig?.targetConfig)) {
+          config.targetConfig = triggerConfig.targetConfig;
+        }
         break;
       case 'mns_topic': {
         const arnConfig = sourceArn.split(':');
@@ -259,17 +263,19 @@ export default class FcInfo {
       case 'eventbridge': {
         config = triggerConfig;
         const eventSourceType = triggerConfig.eventSourceConfig?.eventSourceType;
-        if (eventSourceType === 'RocketMQ') {
-          delete config.eventSourceConfig?.eventSourceParameters?.sourceMNSParameters;
-          delete config.eventSourceConfig?.eventSourceParameters?.sourceRabbitMQParameters;
-        } else if (eventSourceType === 'Default') {
-          delete config.eventSourceConfig;
-        } else if (eventSourceType === 'MNS') {
-          delete config.eventSourceConfig?.eventSourceParameters?.sourceRabbitMQParameters;
-          delete config.eventSourceConfig?.eventSourceParameters?.sourceRocketMQParameters;
-        } else if (eventSourceType === 'RabbitMQ') {
-          delete config.eventSourceConfig?.eventSourceParameters?.sourceMNSParameters;
-          delete config.eventSourceConfig?.eventSourceParameters?.sourceRocketMQParameters;
+        const deleteKeys = {
+          RocketMQ: ['sourceMNSParameters', 'sourceRabbitMQParameters', 'sourceKafkaParameters'],
+          Default: ['eventSourceConfig'],
+          MNS: ['sourceRabbitMQParameters', 'sourceKafkaParameters', 'sourceRocketMQParameters'],
+          RabbitMQ: ['sourceMNSParameters', 'sourceKafkaParameters', 'sourceRocketMQParameters'],
+          Kafka: ['sourceMNSParameters', 'sourceRabbitMQParameters', 'sourceRocketMQParameters'],
+        };
+
+        const needDeleteKeys = deleteKeys[eventSourceType];
+        if (needDeleteKeys) {
+          for (const needDeleteKey of needDeleteKeys) {
+            delete config.eventSourceConfig?.eventSourceParameters?.[needDeleteKey];
+          }
         }
         break;
       }
