@@ -270,9 +270,11 @@ export default class FcInfo {
           RabbitMQ: ['sourceMNSParameters', 'sourceKafkaParameters', 'sourceRocketMQParameters'],
           Kafka: ['sourceMNSParameters', 'sourceRabbitMQParameters', 'sourceRocketMQParameters'],
         };
-        if (deleteKeys[eventSourceType]) {
-          for (const item of deleteKeys[eventSourceType]) {
-            delete config.eventSourceConfig?.eventSourceParameters?.[item];
+
+        const needDeleteKeys = deleteKeys[eventSourceType];
+        if (needDeleteKeys) {
+          for (const needDeleteKey of needDeleteKeys) {
+            delete config.eventSourceConfig?.eventSourceParameters?.[needDeleteKey];
           }
         }
         break;
