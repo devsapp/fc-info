@@ -48,7 +48,7 @@ export default class FcInfo {
     }
     if (nasConfig && nasConfig.mountPoints.length > 0) {
       const handlerDir = ({ serverAddr, mountDir }) => {
-        const subscript: string = serverAddr.indexOf(':/');
+        const subscript: number = serverAddr.indexOf(':/');
         const itemConfig: MountPoint = {
           serverAddr: serverAddr.substr(0, subscript),
           nasDir: serverAddr.substr(subscript + 1),
