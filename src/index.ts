@@ -76,6 +76,7 @@ export default class FcInfoComponent {
       region,
       access: inputs?.project?.access,
       credentials: inputs.credentials,
+      timeout: 60,
     });
     const accountId = fcClient?.accountid;
 

@@ -20,8 +20,10 @@ export default class FcInfo {
 
   private async infoService(serviceName: string, infoType?: boolean): Promise<ServiceConfig> {
     const { data } = await this.fcClient.getService(serviceName);
+    const vpcBinding = await this.getVpcBinding(serviceName);
     if (infoType) {
       data.name = data.serviceName;
+      data.vpcBinding = vpcBinding;
       return data;
     }
     logger.debug(`getService data: \n${JSON.stringify(data, null, '  ')}`);
@@ -29,6 +31,7 @@ export default class FcInfo {
     const serviceConfig: ServiceConfig = {
       name: serviceName,
       internetAccess,
+      vpcBinding,
     };
 
     if (role) {
@@ -299,6 +302,14 @@ export default class FcInfo {
     }
 
     return trigger;
+  }
+
+  private async getVpcBinding(serviceName: string) {
+    const { data } = await this.fcClient._listVpcbinding(serviceName);
+    const vpcIds = _.get(data, 'vpcIds');
+    if (!_.isEmpty(vpcIds)) {
+      return vpcIds;
+    }
   }
 
   private async getFunctionAsyncConfig(serviceName, functionName) {

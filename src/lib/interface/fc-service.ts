@@ -6,6 +6,7 @@ export interface ServiceConfig {
   role?: string;
   vpcConfig?: VpcConfig;
   nasConfig?: NasConfig;
+  vpcBinding?: string[];
 }
 
 export interface LogConfig {
