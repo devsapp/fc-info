@@ -305,10 +305,14 @@ export default class FcInfo {
   }
 
   private async getVpcBinding(serviceName: string) {
-    const { data } = await this.fcClient._listVpcbinding(serviceName);
-    const vpcIds = _.get(data, 'vpcIds');
-    if (!_.isEmpty(vpcIds)) {
-      return vpcIds;
+    try {
+      const { data } = await this.fcClient._listVpcbinding(serviceName);
+      const vpcIds = _.get(data, 'vpcIds');
+      if (!_.isEmpty(vpcIds)) {
+        return vpcIds;
+      }
+    } catch (ex) {
+      logger.debug(`getVpcBinding error code ${ex?.code}, error message: ${ex.message}`);
     }
   }
 
