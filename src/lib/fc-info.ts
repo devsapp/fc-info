@@ -102,6 +102,7 @@ export default class FcInfo {
       instanceType,
       customDNS,
       layers,
+      layersArnV2,
       customRuntimeConfig,
     } = data;
 
@@ -153,6 +154,9 @@ export default class FcInfo {
     }
     if (!_.isEmpty(layers)) {
       functionConfig.layers = layers;
+    }
+    if (!_.isEmpty(layersArnV2)) { // 优先显示 layer arnV2 版本
+      functionConfig.layers = layersArnV2;
     }
     if (!_.isNil(asyncConfig)) {
       functionConfig.asyncConfiguration = asyncConfig;
