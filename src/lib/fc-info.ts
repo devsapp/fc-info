@@ -104,6 +104,8 @@ export default class FcInfo {
       layers,
       layersArnV2,
       customRuntimeConfig,
+      diskSize,
+      cpu,
     } = data;
 
     let customContainer: CustomContainerConfig;
@@ -145,6 +147,12 @@ export default class FcInfo {
     }
     if (caPort) {
       functionConfig.caPort = caPort;
+    }
+    if (cpu) {
+      functionConfig.cpu = cpu;
+    }
+    if (diskSize) {
+      functionConfig.diskSize = diskSize;
     }
     if (runtime === 'custom' && !_.isEmpty(customRuntimeConfig?.command)) {
       functionConfig.customRuntimeConfig = customRuntimeConfig;

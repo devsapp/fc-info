@@ -10,6 +10,8 @@ export interface FunctionConfig {
   gpuMemorySize?: number;
   runtime: string;
   timeout?: number;
+  cpu?: number;
+  diskSize?: number;
   environmentVariables?: {
     [key: string]: any;
   };
