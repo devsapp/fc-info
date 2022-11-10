@@ -27,7 +27,7 @@ export default class FcInfo {
       return data;
     }
     logger.debug(`getService data: \n${JSON.stringify(data, null, '  ')}`);
-    const { description, role, logConfig, vpcConfig, nasConfig, internetAccess } = data;
+    const { description, role, logConfig, vpcConfig, nasConfig, internetAccess, ossMountConfig } = data;
     const serviceConfig: ServiceConfig = {
       name: serviceName,
       internetAccess,
@@ -40,6 +40,10 @@ export default class FcInfo {
 
     if (description) {
       serviceConfig.description = description;
+    }
+
+    if (!_.isEmpty(ossMountConfig?.mountPoints)) {
+      serviceConfig.ossMountConfig = ossMountConfig;
     }
 
     if (vpcConfig && vpcConfig.vpcId) {
