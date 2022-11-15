@@ -7,6 +7,16 @@ export interface ServiceConfig {
   vpcConfig?: VpcConfig;
   nasConfig?: NasConfig;
   vpcBinding?: string[];
+  ossMountConfig?: OSSMountConfig;
+}
+
+export interface OSSMountConfig {
+  mountPoints: {
+    endpoint: string;
+    bucketName: string;
+    mountDir: string;
+    readOnly?: boolean;
+  };
 }
 
 export interface LogConfig {
