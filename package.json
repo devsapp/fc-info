@@ -25,7 +25,7 @@
   "scripts": {
     "preln": "rm -rf ~/.s/components/devsapp.cn/devsapp/fc-info/dist",
     "ln": "ln -s $(pwd)/dist ~/.s/components/devsapp.cn/devsapp/fc-info/dist",
-    "pre": "rm -rf node_modules && rm -rf package-lock.json && npm i",
+    "pre": "npm i",
     "prebuild": "npm run pre",
     "prestart": "npm run pre",
     "start": "npm run watch",

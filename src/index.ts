@@ -21,6 +21,7 @@ export default class FcInfoComponent {
     const infoType: string = outputFile || comParse.data['info-type'];
     const triggerName: any = comParse.data['trigger-name'];
     const domainName: any = comParse.data['domain-name'];
+    const qualifier: string = comParse.data.qualifier;
     const triggerNames: string[] = [];
     if (_.isString(triggerName)) {
       triggerNames.push(triggerName);
@@ -42,6 +43,7 @@ export default class FcInfoComponent {
       outputFile,
       serviceName,
       triggerNames,
+      qualifier,
       access,
       isHelp,
     };
@@ -68,6 +70,7 @@ export default class FcInfoComponent {
     }
     const functionName: string = parsedArgs?.functionName || inputs?.props?.functionName;
     const triggerNames: string[] = _.isEmpty(parsedArgs?.triggerNames) ? inputs?.props?.triggerNames : parsedArgs?.triggerNames;
+    const qualifier: string = parsedArgs?.qualifier;
     if (!functionName && !_.isEmpty(triggerNames)) {
       throw new fcCore.CatchableError('Can not specify trigger without functionName, can be specified by --function-name');
     }
@@ -90,7 +93,7 @@ export default class FcInfoComponent {
       });
     }
 
-    const fcInfo: FcInfo = new FcInfo(fcClient, region);
+    const fcInfo: FcInfo = new FcInfo(fcClient, region, qualifier);
     const resInfo = await fcInfo.info(serviceName, functionName, triggerNames, domainNames, infoType);
 
     if (parsedArgs.outputFile) {

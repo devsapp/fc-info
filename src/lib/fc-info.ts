@@ -9,17 +9,19 @@ export default class FcInfo {
   region: string;
   serviceName: string;
   functionName?: any;
+  qualifier?: string;
   triggerNames?: any;
 
   private fcClient: any;
 
-  constructor(fcClient, region) {
+  constructor(fcClient, region, qualifier?) {
     this.region = region;
     this.fcClient = fcClient;
+    this.qualifier = qualifier;
   }
 
   private async infoService(serviceName: string, infoType?: boolean): Promise<ServiceConfig> {
-    const { data } = await this.fcClient.getService(serviceName);
+    const { data } = await this.fcClient.getService(serviceName, undefined, this.qualifier);
     const vpcBinding = await this.getVpcBinding(serviceName);
     if (infoType) {
       data.name = data.serviceName;
@@ -81,7 +83,7 @@ export default class FcInfo {
   }
 
   private async infoFunction(serviceName: string, functionName: string, infoType?: boolean): Promise<FunctionConfig> {
-    const { data } = await this.fcClient.getFunction(serviceName, functionName);
+    const { data } = await this.fcClient.getFunction(serviceName, functionName, undefined, this.qualifier);
     const asyncConfig = await this.getFunctionAsyncConfig(serviceName, functionName);
 
     if (infoType) {
@@ -334,7 +336,7 @@ export default class FcInfo {
 
   private async getFunctionAsyncConfig(serviceName, functionName) {
     try {
-      const { data } = await this.fcClient.getFunctionAsyncConfig(serviceName, functionName, 'LATEST');
+      const { data } = await this.fcClient.getFunctionAsyncConfig(serviceName, functionName, this.qualifier || 'LATEST');
 
       return {
         destinationConfig: data.destinationConfig,
