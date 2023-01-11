@@ -5,6 +5,7 @@ export interface FunctionConfig {
   caPort?: number;
   customContainerConfig?: CustomContainerConfig;
   customRuntimeConfig?: CustomRuntimeConfig;
+  customHealthCheckConfig?: CustomHealthCheckConfig;
   handler: string;
   memorySize?: number;
   gpuMemorySize?: number;
@@ -30,6 +31,15 @@ export interface FunctionConfig {
       onFailure?: string;
     };
   };
+}
+
+export interface CustomHealthCheckConfig {
+  httpGetUrl: string;
+  initialDelaySeconds: number;
+  periodSeconds: number;
+  timeoutSeconds: number;
+  failureThreshold: number;
+  successThreshold: number;
 }
 
 export interface CustomDNS {

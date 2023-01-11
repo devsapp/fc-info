@@ -110,6 +110,7 @@ export default class FcInfo {
       layers,
       layersArnV2,
       customRuntimeConfig,
+      customHealthCheckConfig,
       diskSize,
       cpu,
     } = data;
@@ -160,8 +161,13 @@ export default class FcInfo {
     if (diskSize) {
       functionConfig.diskSize = diskSize;
     }
-    if (runtime === 'custom' && !_.isEmpty(customRuntimeConfig?.command)) {
-      functionConfig.customRuntimeConfig = customRuntimeConfig;
+    if (runtime === 'custom') {
+      if (customHealthCheckConfig?.httpGetUrl) {
+        functionConfig.customHealthCheckConfig = customHealthCheckConfig;
+      }
+      if (!_.isEmpty(customRuntimeConfig?.command)) {
+        functionConfig.customRuntimeConfig = customRuntimeConfig;
+      }
     }
     if (!_.isNil(customDNS)) {
       functionConfig.customDNS = customDNS;
