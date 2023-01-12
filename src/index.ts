@@ -21,7 +21,7 @@ export default class FcInfoComponent {
     const infoType: string = outputFile || comParse.data['info-type'];
     const triggerName: any = comParse.data['trigger-name'];
     const domainName: any = comParse.data['domain-name'];
-    const qualifier: string = comParse.data.qualifier;
+    const { qualifier } = comParse.data;
     const triggerNames: string[] = [];
     if (_.isString(triggerName)) {
       triggerNames.push(triggerName);
