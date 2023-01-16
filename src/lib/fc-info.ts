@@ -158,7 +158,7 @@ export default class FcInfo {
     if (diskSize) {
       functionConfig.diskSize = diskSize;
     }
-    if (runtime === 'custom') {
+    if (runtime === 'custom' || runtime?.startsWith(runtime, 'custom.')) {
       if (customHealthCheckConfig?.httpGetUrl) {
         functionConfig.customHealthCheckConfig = customHealthCheckConfig;
       }
