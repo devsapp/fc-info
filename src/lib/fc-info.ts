@@ -74,10 +74,7 @@ export default class FcInfo {
     }
 
     if (logConfig && logConfig.logstore) {
-      serviceConfig.logConfig = {
-        logstore: logConfig.logstore,
-        project: logConfig.project,
-      };
+      serviceConfig.logConfig = logConfig;
     }
     return serviceConfig;
   }
