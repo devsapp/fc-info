@@ -19,6 +19,7 @@ export interface FunctionConfig {
   initializationTimeout?: number;
   initializer?: string;
   instanceConcurrency?: number;
+  instanceSoftConcurrency?: number;
   instanceType?: string;
   customDNS?: CustomDNS;
   layers?: string[];
