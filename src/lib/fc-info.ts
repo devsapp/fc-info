@@ -100,6 +100,7 @@ export default class FcInfo {
       gpuMemorySize,
       environmentVariables,
       instanceConcurrency,
+      instanceSoftConcurrency,
       customContainerConfig,
       caPort,
       instanceType,
@@ -145,6 +146,9 @@ export default class FcInfo {
     }
     if (instanceConcurrency) {
       functionConfig.instanceConcurrency = instanceConcurrency;
+    }
+    if (instanceSoftConcurrency) {
+      functionConfig.instanceSoftConcurrency = instanceSoftConcurrency;
     }
     if (customContainer) {
       functionConfig.customContainerConfig = customContainer;
