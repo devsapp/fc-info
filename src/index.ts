@@ -17,7 +17,7 @@ export default class FcInfoComponent {
     const { region, access } = comParse.data;
     const functionName: string = comParse.data['function-name'];
     const serviceName: string = comParse.data['service-name'];
-    const outputFile: string = comParse.data.output;
+    const outputFile: string = comParse.data.file;
     const infoType: string = outputFile || comParse.data['info-type'];
     const triggerName: any = comParse.data['trigger-name'];
     const domainName: any = comParse.data['domain-name'];
