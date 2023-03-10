@@ -376,10 +376,15 @@ export default class FcInfo {
           functionName: item.functionName,
           qualifier: item.qualifier,
         };
-
+        if (!_.isEmpty(item.rewriteConfig)) {
+          _.set(route, 'rewriteConfig', item.rewriteConfig);
+        }
         return route;
       }),
     };
+    if (!_.isEmpty(data.wafConfig)) {
+      _.set(res, 'wafConfig', data.wafConfig);
+    }
     if (data.protocol === 'HTTP,HTTPS') {
       res.certConfig = data.certConfig;
       res.tlsConfig = data.tlsConfig;
