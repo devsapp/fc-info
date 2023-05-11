@@ -290,6 +290,7 @@ export default class FcInfo {
       }
       case 'eventbridge': {
         config = triggerConfig;
+        _.set(config, 'qualifier', qualifier);
         const eventSourceType = triggerConfig.eventSourceConfig?.eventSourceType;
         const deleteKeys = {
           RocketMQ: ['sourceMNSParameters', 'sourceRabbitMQParameters', 'sourceKafkaParameters'],
